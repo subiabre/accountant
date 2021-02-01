@@ -7,6 +7,7 @@ use App\Repository\BookRepository;
 use App\Service\BookService;
 use DateTime;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,7 +54,17 @@ class NewEntryCommand extends Command
         $entry->setAmount($amount);
         $entry->setCost($cost);
 
-        $this->bookService->addEntry($entry, $book);
+        $book = $this->bookService->addEntry($entry, $book);
+
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Book', 'Amount', 'Cost', 'Average Cost'])
+            ->setRows([
+            $book->getName(), 
+            $book->getTotalAmount(), 
+            $book->getTotalCost(), 
+            $book->getAverageCost()
+        ])->render();
         
         return self::SUCCESS;
     }
