@@ -32,6 +32,14 @@ class BookService
         return $book;
     }
 
+    public function removeEntry(Entry $entry, Book $book)
+    {
+        $book->removeEntry($entry);
+
+        $this->saveBook($book);
+        return $book;
+    }
+
     public function calcTotalAmount(Book $book)
     {
         /** @var Entry[] */

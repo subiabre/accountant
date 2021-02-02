@@ -56,15 +56,24 @@ class NewEntryCommand extends Command
 
         $book = $this->bookService->addEntry($entry, $book);
 
-        $table = new Table($output);
-        $table
+        $entryTable = new Table($output);
+        $entryTable
+            ->setHeaders(['Entry', 'Amount', 'Cost'])
+            ->setRows([[
+                $entry->getId(),
+                $entry->getAmount(),
+                $entry->getCost()
+            ]])->render();
+
+        $bookTable = new Table($output);
+        $bookTable
             ->setHeaders(['Book', 'Amount', 'Cost', 'Average Cost'])
-            ->setRows([
-            $book->getName(), 
-            $book->getTotalAmount(), 
-            $book->getTotalCost(), 
-            $book->getAverageCost()
-        ])->render();
+            ->setRows([[
+                $book->getName(),
+                $book->getTotalAmount(), 
+                $book->getTotalCost(), 
+                $book->getAverageCost()
+            ]])->render();
         
         return self::SUCCESS;
     }
