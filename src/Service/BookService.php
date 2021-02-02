@@ -39,6 +39,22 @@ class BookService
         return $book;
     }
 
+    public function readBooks(array $books): array
+    {
+        $bookRows = [];
+
+        foreach ($books as $book) {
+            $bookRows[] = [
+                $book->getName(),
+                $book->getTotalAmount(),
+                $book->getTotalCost(),
+                $book->getAverageCost()
+            ];
+        }
+
+        return $bookRows;
+    }
+
     public function readEntries(Book $book, int $offset = 0, ?int $length = null): array
     {
         $tmpBook = new Book();

@@ -38,7 +38,8 @@ class RemoveEntryCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:erase');
+        $this->setName('account:remove:entry');
+        $this->setAliases(['erase']);
         $this->setDescription('Delete an entry from a book');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name of the entry');

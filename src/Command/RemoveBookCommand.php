@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class RemoveBookCommand extends Command
 {
@@ -29,7 +30,8 @@ class RemoveBookCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:remove');
+        $this->setName('account:remove:book');
+        $this->setAliases(['drop']);
         $this->setDescription('Delete a book and all the entries it contains');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name');
@@ -44,6 +46,16 @@ class RemoveBookCommand extends Command
         if (!$book) {
             $output->writeln("The book `$name` does not exist.");
             return self::FAILURE;
+        }
+
+        $totalEntries = count($book->getEntries());
+        $output->writeln("The book `$name` contains $totalEntries entries");
+
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Do you want to delete this book?", false);
+
+        if (!$helper->ask($input, $output, $question)) {
+            return self::SUCCESS;
         }
 
         $this->bookService->deleteBook($book);

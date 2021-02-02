@@ -30,7 +30,9 @@ class NewEntryCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:new');
+        $this->setName('account:new:entry');
+        $this->setAliases(['new']);
+        $this->setDescription('Add a new entry to a book');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('amount', InputArgument::REQUIRED, 'Amount value of this entry');

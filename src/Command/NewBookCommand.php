@@ -28,7 +28,9 @@ class NewBookCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:create');
+        $this->setName('account:new:book');
+        $this->setAliases(['book']);
+        $this->setDescription('Create a new accounting book');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
     }

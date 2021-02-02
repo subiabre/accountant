@@ -29,9 +29,11 @@ class ReadBookCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:read');
+        $this->setName('account:read:book');
+        $this->setAliases(['read']);
+        $this->setDescription('Read all books overview or entries in a book');
     
-        $this->addArgument('name', InputArgument::REQUIRED, 'Book name to be read');
+        $this->addArgument('name', InputArgument::OPTIONAL, 'Book name to be read');
         $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
     }
 
@@ -39,6 +41,21 @@ class ReadBookCommand extends Command
     {
         $name = $input->getArgument('name');
         $start = (int) $input->getArgument('max');
+
+        if (!$name) {
+            $books = $this->bookRepository->findAll();
+
+            $bookTable = new Table($output);
+            $bookTable
+                ->setHeaders([
+                    'Book',
+                    'Total Amount',
+                    'Total Cost',
+                    'Average Cost'
+                ])
+                ->setRows($this->bookService->readBooks($books))
+                ->render();
+        }
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
