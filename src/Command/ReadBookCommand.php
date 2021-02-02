@@ -55,6 +55,8 @@ class ReadBookCommand extends Command
                 ])
                 ->setRows($this->bookService->readBooks($books))
                 ->render();
+
+            return self::SUCCESS;
         }
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
