@@ -28,7 +28,6 @@ class BookService
         $book->setTotalCost($this->calcTotalCost($book));
         $book->setAverageCost($this->calcAverageCost($book));
 
-        $this->saveBook($book);
         return $book;
     }
 

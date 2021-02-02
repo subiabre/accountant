@@ -56,6 +56,8 @@ class NewEntryCommand extends Command
 
         $book = $this->bookService->addEntry($entry, $book);
 
+        $this->bookService->saveBook($book);
+
         $bookTable = new Table($output);
         $bookTable
             ->setHeaders([
@@ -67,15 +69,8 @@ class NewEntryCommand extends Command
                 'Total Cost',
                 'Average Cost'
             ])
-            ->setRows([[
-                $book->getName(),
-                $entry->getId(),
-                $entry->getAmount(),
-                $entry->getCost(),
-                $book->getTotalAmount(), 
-                $book->getTotalCost(), 
-                $book->getAverageCost()
-            ]])->render();
+            ->setRows($this->bookService->readEntries($book, -1))
+            ->render();
         
         return self::SUCCESS;
     }
