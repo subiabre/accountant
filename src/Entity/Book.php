@@ -25,7 +25,7 @@ class Book
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Entry", cascade={"persistence"})
+     * @ORM\ManyToMany(targetEntity="Entry", cascade={"persist"})
      * @ORM\JoinTable(name="book_entries",
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id", unique=true)}
