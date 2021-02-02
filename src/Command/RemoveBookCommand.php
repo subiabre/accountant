@@ -2,18 +2,16 @@
 
 namespace App\Command;
 
-use App\Entity\Entry;
 use App\Repository\BookRepository;
 use App\Repository\EntryRepository;
 use App\Service\BookService;
-use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveEntryCommand extends Command
+class RemoveBookCommand extends Command
 {
     /** @var BookRepository */
     private $bookRepository;
@@ -38,38 +36,26 @@ class RemoveEntryCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:erase');
-        $this->setDescription('Delete an entry from a book');
+        $this->setName('account:remove');
+        $this->setDescription('Delete a book and all the entries it contains');
     
-        $this->addArgument('name', InputArgument::REQUIRED, 'Book name of the entry');
-        $this->addArgument('id', InputArgument::REQUIRED, 'Id of the entry to be removed');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Book name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $id = $input->getArgument('id');
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
-        $entry = $this->entryRepository->find($id);
 
-        if (!$book || !$entry) {
-            $output->writeln("The book `$name` or the entry `$entry` does not exist.");
+        if (!$book) {
+            $output->writeln("The book `$name` does not exist.");
             return self::FAILURE;
         }
 
-        $book->removeEntry($entry);
-        $this->bookService->saveBook($book);
+        $this->bookService->deleteBook($book);
 
-        $table = new Table($output);
-        $table
-            ->setHeaders(['Book', 'Amount', 'Cost', 'Average Cost'])
-            ->setRows([[
-            $book->getName(),
-            $book->getTotalAmount(), 
-            $book->getTotalCost(), 
-            $book->getAverageCost()
-        ]])->render();
+        $output->writeln("The book `$name` was successfully deleted.");
         
         return self::SUCCESS;
     }

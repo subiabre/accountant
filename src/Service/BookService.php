@@ -65,6 +65,16 @@ class BookService
         return $bookRows;
     }
 
+    public function deleteBook(Book $book)
+    {        
+        foreach ($book->getEntries() as $entry) {
+            $this->em->remove($entry);
+        }
+    
+        $this->em->remove($book);
+        $this->em->flush();
+    }
+
     public function calcTotalAmount(Book $book): float
     {
         /** @var Entry[] */
