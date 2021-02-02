@@ -3,10 +3,8 @@
 namespace App\Command;
 
 use App\Repository\BookRepository;
-use App\Repository\EntryRepository;
 use App\Service\BookService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,21 +14,16 @@ class RemoveBookCommand extends Command
     /** @var BookRepository */
     private $bookRepository;
 
-    /** @var EntryRepository */
-    private $entryRepository;
-
     /** @var BookService */
     private $bookService;
 
     public function __construct(
         BookRepository $bookRepository, 
-        EntryRepository $entryRepository,
         BookService $bookService
     ){
         parent::__construct();
 
         $this->bookRepository = $bookRepository;
-        $this->entryRepository = $entryRepository;
         $this->bookService = $bookService;
     }
 

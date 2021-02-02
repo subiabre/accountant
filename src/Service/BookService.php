@@ -67,11 +67,12 @@ class BookService
 
     public function deleteBook(Book $book)
     {        
+        $this->em->remove($book);
+
         foreach ($book->getEntries() as $entry) {
             $this->em->remove($entry);
         }
     
-        $this->em->remove($book);
         $this->em->flush();
     }
 
