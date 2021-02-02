@@ -21,7 +21,7 @@ class BookService
         $this->em->flush();
     }
 
-    public function addEntry(Entry $entry, Book $book)
+    public function addEntry(Entry $entry, Book $book): Book
     {
         $book->addEntry($entry);
         $book->setTotalAmount($this->calcTotalAmount($book));
@@ -32,7 +32,7 @@ class BookService
         return $book;
     }
 
-    public function removeEntry(Entry $entry, Book $book)
+    public function removeEntry(Entry $entry, Book $book): Book
     {
         $book->removeEntry($entry);
 
@@ -40,7 +40,33 @@ class BookService
         return $book;
     }
 
-    public function calcTotalAmount(Book $book)
+    public function readEntries(Book $book, ?int $offset = null): array
+    {
+        $tmpBook = new Book();
+
+        $bookRows = [];
+        foreach ($book->getEntries() as $entry) {
+            $tmpBook = $this->bookService->addEntry($entry, $tmpBook);
+
+            $bookRows[] = [
+                $book->getName(),
+                $entry->getId(),
+                $entry->getAmount(),
+                $entry->getCost(),
+                $tmpBook->getTotalAmount(), 
+                $tmpBook->getTotalCost(), 
+                $tmpBook->getAverageCost()
+            ];
+        }
+
+        if ($offset) {
+            return array_slice($bookRows, $offset);
+        }
+
+        return $bookRows;
+    }
+
+    public function calcTotalAmount(Book $book): float
     {
         /** @var Entry[] */
         $entries = $book->getEntries();
@@ -53,7 +79,7 @@ class BookService
         return $total;
     }
 
-    public function calcTotalCost(Book $book)
+    public function calcTotalCost(Book $book): float
     {
         /** @var Entry[] */
         $entries = $book->getEntries();
@@ -66,7 +92,7 @@ class BookService
         return $total;
     }
 
-    public function calcAverageCost(Book $book)
+    public function calcAverageCost(Book $book): float
     {
         $totalAmount = $this->calcTotalAmount($book);
         $totalCost = $this->calcTotalCost($book);

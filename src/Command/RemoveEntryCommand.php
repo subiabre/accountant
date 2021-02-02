@@ -52,11 +52,12 @@ class RemoveEntryCommand extends Command
         $book = $this->bookRepository->findOneBy(['name' => $name]);
         $entry = $this->entryRepository->find($id);
 
-        if (!$book && !$id) {
+        if (!$book || !$entry) {
             return self::FAILURE;
         }
 
-        $book = $this->bookService->removeEntry($entry, $book);
+        $book->removeEntry($entry);
+        $this->bookService->saveBook($book);
 
         $table = new Table($output);
         $table

@@ -2,17 +2,16 @@
 
 namespace App\Command;
 
-use App\Entity\Entry;
+use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
-use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewEntryCommand extends Command
+class ReadBookCommand extends Command
 {
     /** @var BookRepository */
     private $bookRepository;
@@ -30,18 +29,16 @@ class NewEntryCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:new');
+        $this->setName('account:read');
     
-        $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
-        $this->addArgument('amount', InputArgument::REQUIRED, 'Amount value of this entry');
-        $this->addArgument('cost', InputArgument::REQUIRED, 'Cost value of this entry');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Book name to be read');
+        $this->addArgument('start', InputArgument::OPTIONAL, 'Max number of entries to print');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $amount = $input->getArgument('amount');
-        $cost = $input->getArgument('cost');
+        $start = $input->getArgument('start');
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
@@ -49,34 +46,20 @@ class NewEntryCommand extends Command
             return self::FAILURE;
         }
 
-        $entry = new Entry();
-        $entry->setDate(new DateTime());
-        $entry->setAmount($amount);
-        $entry->setCost($cost);
-
-        $book = $this->bookService->addEntry($entry, $book);
-
         $bookTable = new Table($output);
         $bookTable
             ->setHeaders([
                 'Book',
-                'Last Entry',
+                'Entry',
                 'Entry Amount',
                 'Entry Cost',
                 'Total Amount',
                 'Total Cost',
                 'Average Cost'
             ])
-            ->setRows([[
-                $book->getName(),
-                $entry->getId(),
-                $entry->getAmount(),
-                $entry->getCost(),
-                $book->getTotalAmount(), 
-                $book->getTotalCost(), 
-                $book->getAverageCost()
-            ]])->render();
-        
+            ->setRows($this->bookService->readEntries($book, $start))
+            ->render();
+
         return self::SUCCESS;
     }
 }
