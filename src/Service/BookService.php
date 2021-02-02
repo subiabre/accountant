@@ -58,7 +58,7 @@ class BookService
             ];
         }
 
-        if ($offset) {
+        if ($offset !== 0 || $length) {
             return array_slice($bookRows, $offset, $length);
         }
 
