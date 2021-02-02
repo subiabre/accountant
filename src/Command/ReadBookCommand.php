@@ -32,13 +32,13 @@ class ReadBookCommand extends Command
         $this->setName('account:read');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name to be read');
-        $this->addArgument('start', InputArgument::OPTIONAL, 'Max number of entries to print');
+        $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $start = $input->getArgument('start');
+        $start = (int) $input->getArgument('max');
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
@@ -46,18 +46,26 @@ class ReadBookCommand extends Command
             return self::FAILURE;
         }
 
+        if ($start < 0) {
+            $offset = $start;
+            $length = null;
+        } else {
+            $offset = 0;
+            $length = $start;
+        }
+
         $bookTable = new Table($output);
         $bookTable
             ->setHeaders([
                 'Book',
-                'Entry',
+                'Entry Id',
                 'Entry Amount',
                 'Entry Cost',
                 'Total Amount',
                 'Total Cost',
                 'Average Cost'
             ])
-            ->setRows($this->bookService->readEntries($book, $start))
+            ->setRows($this->bookService->readEntries($book, $offset, $length))
             ->render();
 
         return self::SUCCESS;

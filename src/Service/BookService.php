@@ -39,7 +39,7 @@ class BookService
         return $book;
     }
 
-    public function readEntries(Book $book, ?int $offset = null): array
+    public function readEntries(Book $book, int $offset = 0, ?int $length = null): array
     {
         $tmpBook = new Book();
 
@@ -59,7 +59,7 @@ class BookService
         }
 
         if ($offset) {
-            return array_slice($bookRows, $offset);
+            return array_slice($bookRows, $offset, $length);
         }
 
         return $bookRows;
