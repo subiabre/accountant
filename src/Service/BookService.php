@@ -46,7 +46,7 @@ class BookService
 
         $bookRows = [];
         foreach ($book->getEntries() as $entry) {
-            $tmpBook = $this->bookService->addEntry($entry, $tmpBook);
+            $tmpBook = $this->addEntry($entry, $tmpBook);
 
             $bookRows[] = [
                 $book->getName(),
