@@ -11,12 +11,12 @@ This app runs in PHP and uses composer as a dependency manager, so you must have
 
 Clone this repository:
 ```bash
-$ git clone https://github.com/subiabre/accountant
+git clone https://github.com/subiabre/accountant
 ```
 
 Install composer dependencies:
 ```bash
-$ composer install
+composer install
 ```
 
 Update environment variables:
@@ -51,10 +51,10 @@ accountant book my_doge
 accountant book bros_doge
 ```
 
-And when someone increases their doges, simply let accountant know how much at what cost:
+And when someone increases their doges, simply let accountant know what, how much and at what cost:
 ```bash
-accountant new my_doge new 300 1
-accountant new bros_doge new 100 0.9
+accountant new my_doge 300 1
+accountant new bros_doge 100 0.9
 ```
 ## Roadmap
 * Add support for currency notation in cost argument: `accountant new some_stock 300 1€`
