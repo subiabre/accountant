@@ -43,6 +43,7 @@ class ReadBookCommand extends Command
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
         if (!$book) {
+            $output->writeln("The book `$name` does not exist.");
             return self::FAILURE;
         }
 
