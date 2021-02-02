@@ -52,7 +52,7 @@ class RemoveBookCommand extends Command
         $output->writeln("The book `$name` contains $totalEntries entries");
 
         $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("Do you want to delete this book?", false);
+        $question = new ConfirmationQuestion("Do you want to delete this book? (y/n): ", false);
 
         if (!$helper->ask($input, $output, $question)) {
             return self::SUCCESS;
