@@ -3,7 +3,6 @@
 namespace App\Table;
 
 use App\Entity\Book;
-use App\Service\BookService;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 
