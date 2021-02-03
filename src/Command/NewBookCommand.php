@@ -31,8 +31,8 @@ class NewBookCommand extends Command
     {
         $this->setName('account:new:book');
         $this->setAliases(['new']);
-        $this->setDescription('Create a new accounting book. Books are supposed to hold amounts of the same item.');
-    
+        $this->setDescription('Create a new accounting book');
+
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
     }

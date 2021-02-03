@@ -44,18 +44,18 @@ Get a list of available commands:
 accountant list account
 ```
 
-Say you share an account in an exchange with your brother and you two buy [dogecoin](dogecoin.com) and don't want to split it 50/50 because one buys more than the other. Simply create a new book for each of you:
+Say you share an account in an exchange with your brother and you two buy [dogecoin](dogecoin.com) and don't want to split it 50/50 because one buys more than the other, or one buys in € and the other in $ and the maths are hard. Simply create a new book for each of you:
 
 ```bash
-accountant book my_doge
-accountant book bros_doge
+accountant new my_doge EUR # specify € for this book
+accountant new bros_doge # default currency is $
 ```
 
 And when someone increases their doges, simply let accountant know what, how much and at what cost:
 ```bash
-accountant new my_doge 300 1
-accountant new bros_doge 100 0.9
+accountant add my_doge 300 1
+accountant add bros_doge 100 0.9
 ```
 ## Roadmap
-* Add support for currency notation in cost argument: `accountant new some_stock 300 1€`
+* ~~Add support for currency notation in cost argument: `accountant new some_stock 300 1€`~~
 * Add support to export data to JSON/CSV: `accountant export some_book book.json`
