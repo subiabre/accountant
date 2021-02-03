@@ -53,7 +53,7 @@ class NewBookCommand extends Command
         $book->setName($name);
         $book->setCurrency($currency);
 
-        $this->bookService->saveBook($book);
+        $this->bookService->saveNewBook($book);
 
         $output->writeln("The book `$name` was successfully created.");
 

@@ -25,6 +25,12 @@ class BookService
         $this->em->flush();
     }
 
+    public function saveNewBook(Book $book)
+    {
+        $book->setTotalCost(Money::of(0, $book->getCurrency()));
+        $book->setAverageCost(Money::of(0, $book->getCurrency()));
+    }
+
     public function addEntry(Entry $entry, Book $book): Book
     {
         $book->addEntry($entry);
