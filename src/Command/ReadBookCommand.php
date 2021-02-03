@@ -2,11 +2,11 @@
 
 namespace App\Command;
 
-use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
+use App\Table\BookEntriesTable;
+use App\Table\BooksTable;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,15 +45,9 @@ class ReadBookCommand extends Command
         if (!$name) {
             $books = $this->bookRepository->findAll();
 
-            $bookTable = new Table($output);
-            $bookTable
-                ->setHeaders([
-                    'Book',
-                    'Total Amount',
-                    'Total Cost',
-                    'Average Cost'
-                ])
-                ->setRows($this->bookService->readBooks($books))
+            $table = new BooksTable($output);
+            $table
+                ->setBooks($books)
                 ->render();
 
             return self::SUCCESS;
@@ -74,18 +68,9 @@ class ReadBookCommand extends Command
             $length = $start;
         }
 
-        $bookTable = new Table($output);
-        $bookTable
-            ->setHeaders([
-                'Book',
-                'Entry Id',
-                'Entry Amount',
-                'Entry Cost',
-                'Total Amount',
-                'Total Cost',
-                'Average Cost'
-            ])
-            ->setRows($this->bookService->readEntries($book, $offset, $length))
+        $table = new BookEntriesTable($output, $this->bookService);
+        $table
+            ->setBook($book, $offset, $length)
             ->render();
 
         return self::SUCCESS;

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Brick\Money\Currency;
+use Brick\Money\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +27,11 @@ class Book
     private $name;
 
     /**
+     * @ORM\Column(type="object", length=255)
+     */
+    private $currency;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Entry", cascade={"persist"})
      * @ORM\JoinTable(name="book_entries",
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
@@ -39,12 +46,12 @@ class Book
     private $totalAmount;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="object", nullable=true)
      */
     private $totalCost;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="object", nullable=true)
      */
     private $averageCost;
 
@@ -69,6 +76,18 @@ class Book
 
         return $this;
     }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $currency): self
+    {
+        $this->currency = $currency;
+
+        return $this;
+    } 
 
     /**
      * @return Collection|Entry[]
@@ -106,24 +125,24 @@ class Book
         return $this;
     }
 
-    public function getTotalCost(): ?float
+    public function getTotalCost(): ?Money
     {
         return $this->totalCost;
     }
 
-    public function setTotalCost(?float $totalCost): self
+    public function setTotalCost(?Money $totalCost): self
     {
         $this->totalCost = $totalCost;
 
         return $this;
     }
 
-    public function getAverageCost(): ?float
+    public function getAverageCost(): ?Money
     {
         return $this->averageCost;
     }
 
-    public function setAverageCost(?float $averageCost): self
+    public function setAverageCost(?Money $averageCost): self
     {
         $this->averageCost = $averageCost;
 

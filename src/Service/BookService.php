@@ -4,7 +4,11 @@ namespace App\Service;
 
 use App\Entity\Book;
 use App\Entity\Entry;
+use App\Transaction\Value;
+use Brick\Money\Money;
+use Brick\Money\MoneyBag;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Helper\Table;
 
 class BookService
 {
@@ -34,51 +38,11 @@ class BookService
     public function removeEntry(Entry $entry, Book $book): Book
     {
         $book->removeEntry($entry);
+        $book->setTotalAmount($this->calcTotalAmount($book));
+        $book->setTotalCost($this->calcTotalCost($book));
+        $book->setAverageCost($this->calcAverageCost($book));
 
-        $this->saveBook($book);
         return $book;
-    }
-
-    public function readBooks(array $books): array
-    {
-        $bookRows = [];
-
-        foreach ($books as $book) {
-            $bookRows[] = [
-                $book->getName(),
-                $book->getTotalAmount(),
-                $book->getTotalCost(),
-                $book->getAverageCost()
-            ];
-        }
-
-        return $bookRows;
-    }
-
-    public function readEntries(Book $book, int $offset = 0, ?int $length = null): array
-    {
-        $tmpBook = new Book();
-
-        $bookRows = [];
-        foreach ($book->getEntries() as $entry) {
-            $tmpBook = $this->addEntry($entry, $tmpBook);
-
-            $bookRows[] = [
-                $book->getName(),
-                $entry->getId(),
-                $entry->getAmount(),
-                $entry->getCost(),
-                $tmpBook->getTotalAmount(), 
-                $tmpBook->getTotalCost(), 
-                $tmpBook->getAverageCost()
-            ];
-        }
-
-        if ($offset !== 0 || $length) {
-            return array_slice($bookRows, $offset, $length);
-        }
-
-        return $bookRows;
     }
 
     public function deleteBook(Book $book)
@@ -105,24 +69,21 @@ class BookService
         return $total;
     }
 
-    public function calcTotalCost(Book $book): float
+    public function calcTotalCost(Book $book): Money
     {
         /** @var Entry[] */
         $entries = $book->getEntries();
-        $total = 0;
+        $money = Money::of(0, $book->getCurrency());
 
         foreach ($entries as $entry) {
-            $total += $entry->getCost();
+            $money->plus($entry->getCost());
         }
 
-        return $total;
+        return $money;
     }
 
-    public function calcAverageCost(Book $book): float
+    public function calcAverageCost(Book $book): Money
     {
-        $totalAmount = $this->calcTotalAmount($book);
-        $totalCost = $this->calcTotalCost($book);
-
-        return $totalCost / $totalAmount;
+        return $this->calcTotalCost($book)->dividedBy($this->calcTotalAmount($book));
     }
 }

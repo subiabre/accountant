@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
+use Brick\Money\Currency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,15 +30,17 @@ class NewBookCommand extends Command
     protected function configure()
     {
         $this->setName('account:new:book');
-        $this->setAliases(['book']);
-        $this->setDescription('Create a new accounting book');
+        $this->setAliases(['new']);
+        $this->setDescription('Create a new accounting book. Books are supposed to hold amounts of the same item.');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
+        $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
+        $currency = Currency::of($input->getArgument('currency'));
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
@@ -48,8 +51,11 @@ class NewBookCommand extends Command
 
         $book = new Book();
         $book->setName($name);
+        $book->setCurrency($currency);
 
         $this->bookService->saveBook($book);
+
+        $output->writeln("The book `$name` was successfully created.");
 
         return self::SUCCESS;
     }

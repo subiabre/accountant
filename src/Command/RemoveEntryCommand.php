@@ -2,11 +2,10 @@
 
 namespace App\Command;
 
-use App\Entity\Entry;
 use App\Repository\BookRepository;
 use App\Repository\EntryRepository;
 use App\Service\BookService;
-use DateTime;
+use App\Table\BookEntriesTable;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -59,18 +58,15 @@ class RemoveEntryCommand extends Command
             return self::FAILURE;
         }
 
-        $book->removeEntry($entry);
+        $book = $this->bookService->removeEntry($entry, $book);
+        
         $this->bookService->saveBook($book);
 
-        $table = new Table($output);
+        $table = new BookEntriesTable($output, $this->bookService);
         $table
-            ->setHeaders(['Book', 'Amount', 'Cost', 'Average Cost'])
-            ->setRows([[
-            $book->getName(),
-            $book->getTotalAmount(), 
-            $book->getTotalCost(), 
-            $book->getAverageCost()
-        ]])->render();
+            ->setBook($book, -1)
+            ->render();
+
         
         return self::SUCCESS;
     }

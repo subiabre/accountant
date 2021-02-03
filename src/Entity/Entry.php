@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\EntryRepository;
+use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,7 +23,7 @@ class Entry
     private $amount;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="object")
      */
     private $cost;
 
@@ -49,12 +49,12 @@ class Entry
         return $this;
     }
 
-    public function getCost(): ?float
+    public function getCost(): ?Money
     {
         return $this->cost;
     }
 
-    public function setCost(float $cost): self
+    public function setCost(Money $cost): self
     {
         $this->cost = $cost;
 
