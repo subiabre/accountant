@@ -41,7 +41,7 @@ class NewEntryCommand extends Command
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('amount', InputArgument::REQUIRED, 'Amount value of this entry');
         $this->addArgument('cost', InputArgument::REQUIRED, 'Cost value of this entry');
-        $this->addArgument('currency', InputArgument::OPTIONAL, 'Currency of the cost value');
+        $this->addArgument('currency', InputArgument::OPTIONAL, 'Currency of the cost value', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
