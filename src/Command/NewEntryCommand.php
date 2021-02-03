@@ -50,9 +50,10 @@ class NewEntryCommand extends Command
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
         $amount = floatval($input->getArgument('amount'));
+        $currency = $input->getArgument('currency') ? Currency::of($input->getArgument('currency')) : $book->getCurrency();
         $cost = Money::of(
             $input->getArgument('cost'), 
-            $input->getArgument('currency') ? Currency::of($input->getArgument('currency')) : $book->getCurrency()
+            $currency
         );
 
         if (!$book) {
