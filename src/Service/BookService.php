@@ -84,7 +84,7 @@ class BookService
         $money = Money::of(0, $book->getCurrency());
 
         foreach ($entries as $entry) {
-            $money->plus($entry->getCost());
+            $money = $money->plus($entry->getCost());
         }
 
         return $money;
