@@ -41,7 +41,6 @@ class NewEntryCommand extends Command
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('amount', InputArgument::REQUIRED, 'Amount value of this entry');
         $this->addArgument('cost', InputArgument::REQUIRED, 'Cost value of this entry');
-        $this->addArgument('currency', InputArgument::OPTIONAL, 'Currency of the cost value', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,17 +48,13 @@ class NewEntryCommand extends Command
         $name = $input->getArgument('name');
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
-        $amount = floatval($input->getArgument('amount'));
-        $currency = $input->getArgument('currency') ? Currency::of($input->getArgument('currency')) : $book->getCurrency();
-        $cost = Money::of(
-            $input->getArgument('cost'), 
-            $currency
-        );
-
         if (!$book) {
             $output->writeln("The book `$name` does not exist.");
             return self::FAILURE;
         }
+
+        $amount = floatval($input->getArgument('amount'));
+        $cost = Money::of($input->getArgument('cost'), $book->getCurrency());
 
         $entry = new Entry();
         $entry->setDate(new DateTime());
