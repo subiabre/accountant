@@ -93,6 +93,6 @@ class BookService
 
     public function calcAverageCost(Book $book): Money
     {
-        return $this->calcTotalCost($book)->dividedBy($this->calcTotalAmount($book));
+        return $this->calcTotalCost($book)->dividedBy($this->calcTotalAmount($book), RoundingMode::UP);
     }
 }
