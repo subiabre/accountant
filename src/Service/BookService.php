@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Book;
 use App\Entity\Entry;
 use App\Transaction\Value;
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use Brick\Money\MoneyBag;
 use Doctrine\ORM\EntityManagerInterface;
@@ -84,7 +85,7 @@ class BookService
         $money = Money::of(0, $book->getCurrency());
 
         foreach ($entries as $entry) {
-            $money = $money->plus($entry->getCost());
+            $money = $money->plus($entry->getCost(), RoundingMode::UP);
         }
 
         return $money;
