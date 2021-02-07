@@ -49,7 +49,7 @@ class NewEntryCommand extends Command
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
         if (!$book) {
-            $output->writeln("The book `$name` does not exist.");
+            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
             return self::FAILURE;
         }
 

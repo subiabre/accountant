@@ -2,17 +2,15 @@
 
 namespace App\Command;
 
-use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
 use Brick\Money\Context\CustomContext;
-use Brick\Money\Currency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewBookCommand extends Command
+class UpdateBookCommand extends Command
 {
     /** @var BookRepository */
     private $bookRepository;
@@ -30,36 +28,31 @@ class NewBookCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:new:book');
-        $this->setAliases(['new']);
-        $this->setDescription('Create a new accounting book');
+        $this->setName('account:update:book');
+        $this->setAliases(['update']);
+        $this->setDescription('Update an accounting book');
 
-        $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
-        $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Book name');
         $this->addArgument('rounding', InputArgument::OPTIONAL, 'Number of decimals to preserve before rounding', 2);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $currency = Currency::of($input->getArgument('currency'));
         $context = new CustomContext($input->getArgument('rounding'));
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
-        if ($book) {
-            $output->writeln(sprintf(BookService::BOOK_EXISTS, $name));
+        if (!$book) {
+            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
             return self::FAILURE;
         }
 
-        $book = new Book();
-        $book->setName($name);
-        $book->setCurrency($currency);
         $book->setCashContext($context);
 
-        $this->bookService->saveNewBook($book);
+        $this->bookService->saveBook($book);
 
-        $output->writeln(sprintf(BookService::BOOK_CREATED, $name));
+        $output->writeln(sprintf(BookService::BOOK_UPDATED, $name));
 
         return self::SUCCESS;
     }

@@ -4,16 +4,17 @@ namespace App\Service;
 
 use App\Entity\Book;
 use App\Entity\Entry;
-use App\Transaction\Value;
 use Brick\Math\RoundingMode;
-use Brick\Money\Context\CustomContext;
 use Brick\Money\Money;
-use Brick\Money\MoneyBag;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Helper\Table;
 
 class BookService
 {
+    public const BOOK_CREATED = "The book `%s` was successfully created.";
+    public const BOOK_UPDATED = "The book `%s` was successfully updated.";
+    public const BOOK_MISSING = "The book `%s` does not exist.";
+    public const BOOK_EXISTS = "The book `%s` already exists.";
+
     private $em;
 
     public function __construct(EntityManagerInterface $em)

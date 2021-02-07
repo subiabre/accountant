@@ -61,7 +61,7 @@ class ReadBookCommand extends Command
         $context = $input->getOption('rounding') ? new CustomContext($input->getOption('rounding')) : $book->getCashContext();
 
         if (!$book) {
-            $output->writeln("The book `$name` does not exist.");
+            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
             return self::FAILURE;
         }
 
