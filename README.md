@@ -1,4 +1,4 @@
-# Accountant
+# accountant
 Lightweight console based app I wrote to keep track of financial assets I kept buying in different places.
 
 So far is pretty basic, it does just what I need:
@@ -57,5 +57,9 @@ accountant add my_doge 300 1
 accountant add bros_doge 100 0.9
 ```
 ## Roadmap
-* ~~Add support for currency notation in cost argument: `accountant new some_stock 300 1€`~~
-* Add support to export data to JSON/CSV: `accountant export some_book book.json`
+- [x] Add support for currency notation in cost argument, e.g: `new some_stock 300 1€`
+- [x] Allow books to be hidden from the book listing, e.g: `update some_book --hidden=true`
+- [x] Add support to change rounding context of books on the fly, e.g: `read some_book --context=4`
+- [ ] Add support to export data to JSON/CSV, e.g: `export some_book book.json`
+- [ ] Add encryption for database going data
+- [ ] Add password option to books, e.g: `update some_book --password=MyPassword`
