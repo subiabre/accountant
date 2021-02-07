@@ -13,7 +13,9 @@ class BookService
     public const BOOK_CREATED = "The book `%s` was successfully created.";
     public const BOOK_UPDATED = "The book `%s` was successfully updated.";
     public const BOOK_MISSING = "The book `%s` does not exist.";
-    public const BOOK_EXISTS = "The book `%s` already exists.";
+    public const BOOK_ALREADY = "The book `%s` already exists.";
+    public const BOOK_DELETED = "The book `%s` was successfully deleted.";
+    public const BOOK_ENTRIES = "The book `%s` contains %s entries.";
 
     private $em;
 

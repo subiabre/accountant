@@ -32,7 +32,7 @@ class NewBookCommand extends BookCommand
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
         if ($book) {
-            $output->writeln(sprintf(BookService::BOOK_EXISTS, $name));
+            $output->writeln(sprintf(BookService::BOOK_ALREADY, $name));
             return self::FAILURE;
         }
 

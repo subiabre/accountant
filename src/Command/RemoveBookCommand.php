@@ -44,12 +44,11 @@ class RemoveBookCommand extends Command
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
         if (!$book) {
-            $output->writeln("The book `$name` does not exist.");
+            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
             return self::FAILURE;
         }
 
-        $totalEntries = count($book->getEntries());
-        $output->writeln("The book `$name` contains $totalEntries entries");
+        $output->writeln(sprintf(BookService::BOOK_ENTRIES, $name, count($book->getEntries())));
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion("Do you want to delete this book? (y/n): ", false);
@@ -60,7 +59,7 @@ class RemoveBookCommand extends Command
 
         $this->bookService->deleteBook($book);
 
-        $output->writeln("The book `$name` was successfully deleted.");
+        $output->writeln(sprintf(BookService::BOOK_DELETED, $name));
         
         return self::SUCCESS;
     }
