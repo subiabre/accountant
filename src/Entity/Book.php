@@ -155,7 +155,7 @@ class Book
         return $this;
     }
 
-    public function getCashContext(): Context
+    public function getCashContext(): ?Context
     {
         return $this->cashContext;
     }
