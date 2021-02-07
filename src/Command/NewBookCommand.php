@@ -3,31 +3,14 @@
 namespace App\Command;
 
 use App\Entity\Book;
-use App\Repository\BookRepository;
 use App\Service\BookService;
-use Brick\Money\Context\CustomContext;
 use Brick\Money\Currency;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewBookCommand extends Command
+class NewBookCommand extends BookCommand
 {
-    /** @var BookRepository */
-    private $bookRepository;
-
-    /** @var BookService */
-    private $bookService;
-
-    public function __construct(BookRepository $bookRepository, BookService $bookService)
-    {
-        parent::__construct();
-
-        $this->bookRepository = $bookRepository;
-        $this->bookService = $bookService;
-    }
-
     protected function configure()
     {
         $this->setName('account:new:book');
@@ -36,14 +19,15 @@ class NewBookCommand extends Command
 
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
-        $this->addArgument('rounding', InputArgument::OPTIONAL, 'Number of decimals to preserve before rounding', 2);
+        
+        $this->setContextOption();
+        $this->setHiddenOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
         $currency = Currency::of($input->getArgument('currency'));
-        $context = new CustomContext($input->getArgument('rounding'));
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
 
@@ -55,9 +39,8 @@ class NewBookCommand extends Command
         $book = new Book();
         $book->setName($name);
         $book->setCurrency($currency);
-        $book->setCashContext($context);
 
-        $this->bookService->saveNewBook($book);
+        $this->bookService->saveNewBook($this->setBookOptions($input, $book));
 
         $output->writeln(sprintf(BookService::BOOK_CREATED, $name));
 
