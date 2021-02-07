@@ -160,7 +160,7 @@ class Book
         return $this->cashContext;
     }
 
-    public function setCashContext(Context $cashContext): self
+    public function setCashContext(?Context $cashContext): self
     {
         $this->cashContext = $cashContext;
 
