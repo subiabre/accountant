@@ -29,9 +29,23 @@ abstract class BookCommand extends Command
         $this->bookService = $bookService;
     }
 
+    protected function getHiddenOption(InputInterface $input, Book $book): bool
+    {
+        return $input->getOption('hidden') 
+            ? filter_var($input->getOption('hidden'), FILTER_VALIDATE_BOOLEAN) 
+            : $book->isHidden();
+    }
+
     protected function setHiddenOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
         $this->addOption('hidden', null, $inputOption, 'Set this book as hidden', false);
+    }
+
+    protected function getContextOption(InputInterface $input, Book $book): Context
+    {
+        return $input->getOption('context') 
+            ? new CustomContext($input->getOption('context')) 
+            : $book->getCashContext();
     }
 
     protected function setContextOption(int $inputOption = InputOption::VALUE_OPTIONAL)
@@ -39,37 +53,13 @@ abstract class BookCommand extends Command
         $this->addOption('context', null, $inputOption, 'Number of decimals to preserve before rounding', 2);
     }
 
+    protected function getSortOption(InputInterface $input): string
+    {
+        return $input->getOption('sort') ? $input->getOption('sort') : 'ASC';
+    }
+
     protected function setSortOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
         $this->addOption('sort', null, $inputOption, 'Set the sort order (ASC/DESC)', 'ASC');
-    }
-
-    protected function setBookOptions(InputInterface $input, Book $book): Book
-    {
-        $book
-            ->setIsHidden($this->getHidden($input, $book))
-            ->setCashContext($this->getContext($input, $book))
-            ;
-
-        return $book;
-    }
-
-    protected function getContext(InputInterface $input, Book $book): Context
-    {
-        return $input->getOption('context') 
-            ? new CustomContext($input->getOption('context')) 
-            : $book->getCashContext();
-    }
-
-    protected function getHidden(InputInterface $input, Book $book): bool
-    {
-        return $input->getOption('hidden') 
-            ? filter_var($input->getOption('hidden'), FILTER_VALIDATE_BOOLEAN) 
-            : $book->isHidden();
-    }
-
-    protected function getSort(InputInterface $input): string
-    {
-        return $input->getOption('sort') ? $input->getOption('sort') : 'ASC';
     }
 }

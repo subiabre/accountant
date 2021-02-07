@@ -31,7 +31,7 @@ class ReadBookCommand extends BookCommand
         if (!$name) {
             $books = $this->bookRepository->findBy(
                 ['isHidden' => false | null], 
-                ['name' => $this->getSort($input)]
+                ['name' => $this->getSortOption($input)]
             );
 
             $table = new BooksTable($output);
@@ -49,10 +49,12 @@ class ReadBookCommand extends BookCommand
             return self::FAILURE;
         }
 
+        $book->setCashContext($this->getContextOption($input, $book));
+
         $table = new BookEntriesTable($output, $this->bookService);
         $table
             ->setBook(
-                $this->setBookOptions($input, $book), 
+                $book, 
                 $this->getOffset($input), 
                 $this->getLength($input)
             )->render();

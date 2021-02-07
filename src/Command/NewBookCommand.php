@@ -37,10 +37,14 @@ class NewBookCommand extends BookCommand
         }
 
         $book = new Book();
-        $book->setName($name);
-        $book->setCurrency($currency);
+        $book
+            ->setName($name)
+            ->setCurrency($currency)
+            ->setCashContext($this->getContextOption($input, $book))
+            ->setIsHidden($this->getHiddenOption($input, $book))
+            ;
 
-        $this->bookService->saveNewBook($this->setBookOptions($input, $book));
+        $this->bookService->saveNewBook($book);
 
         $output->writeln(sprintf(BookService::BOOK_CREATED, $name));
 

@@ -31,7 +31,12 @@ class UpdateBookCommand extends BookCommand
             return self::FAILURE;
         }
 
-        $this->bookService->saveBook($this->setBookOptions($input, $book));
+        $book
+            ->setCashContext($this->getContextOption($input, $book))
+            ->setIsHidden($this->getHiddenOption($input, $book))
+            ;
+
+        $this->bookService->saveBook($book);
 
         $output->writeln(sprintf(BookService::BOOK_UPDATED, $name));
 
