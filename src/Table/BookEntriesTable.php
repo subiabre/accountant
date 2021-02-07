@@ -25,6 +25,7 @@ class BookEntriesTable extends Table
         $entries = [];
 
         $tableBook->setCurrency($book->getCurrency());
+        $tableBook->setCashContext($book->getCashContext());
         $this->setHeaders([
             'Book',
             'Entry #',
