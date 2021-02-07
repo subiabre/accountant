@@ -57,7 +57,7 @@ class Book
     private $averageCost;
 
     /**
-     * @ORM\Column(type="object")
+     * @ORM\Column(type="object", nullable=true)
      */
     private $cashContext;
 
