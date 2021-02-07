@@ -21,6 +21,7 @@ class ReadBookCommand extends BookCommand
         $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
 
         $this->setContextOption();
+        $this->setSortOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

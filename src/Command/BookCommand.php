@@ -29,14 +29,19 @@ abstract class BookCommand extends Command
         $this->bookService = $bookService;
     }
 
-    protected function setHiddenOption()
+    protected function setHiddenOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
-        $this->addOption('hidden', null, InputOption::VALUE_OPTIONAL, 'Set this book as hidden', false);
+        $this->addOption('hidden', null, $inputOption, 'Set this book as hidden', false);
     }
 
-    protected function setContextOption()
+    protected function setContextOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
-        $this->addOption('context', null, InputOption::VALUE_OPTIONAL, 'Number of decimals to preserve before rounding', 2);
+        $this->addOption('context', null, $inputOption, 'Number of decimals to preserve before rounding', 2);
+    }
+
+    protected function setSortOption(int $inputOption = InputOption::VALUE_OPTIONAL)
+    {
+        $this->addOption('sort', null, $inputOption, 'Set the sort order (ASC/DESC)', 'ASC');
     }
 
     protected function setBookOptions(InputInterface $input, Book $book): Book
