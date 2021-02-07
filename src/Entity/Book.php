@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Brick\Money\Context;
 use Brick\Money\Currency;
 use Brick\Money\Money;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,6 +55,11 @@ class Book
      * @ORM\Column(type="object", nullable=true)
      */
     private $averageCost;
+
+    /**
+     * @ORM\Column(type="object")
+     */
+    private $cashContext;
 
     public function __construct()
     {
@@ -145,6 +151,18 @@ class Book
     public function setAverageCost(?Money $averageCost): self
     {
         $this->averageCost = $averageCost;
+
+        return $this;
+    }
+
+    public function getCashContext(): Context
+    {
+        return $this->cashContext;
+    }
+
+    public function setCashContext(Context $cashContext): self
+    {
+        $this->cashContext = $cashContext;
 
         return $this;
     }

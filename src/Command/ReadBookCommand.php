@@ -6,9 +6,11 @@ use App\Repository\BookRepository;
 use App\Service\BookService;
 use App\Table\BookEntriesTable;
 use App\Table\BooksTable;
+use Brick\Money\Context\CustomContext;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ReadBookCommand extends Command
@@ -35,6 +37,8 @@ class ReadBookCommand extends Command
     
         $this->addArgument('name', InputArgument::OPTIONAL, 'Book name to be read');
         $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
+
+        $this->addOption('rounding', null, InputOption::VALUE_OPTIONAL, 'Number of decimals to preserve before rounding');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -54,6 +58,7 @@ class ReadBookCommand extends Command
         }
 
         $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $context = $input->getOption('rounding') ? new CustomContext($input->getOption('rounding')) : $book->getCashContext();
 
         if (!$book) {
             $output->writeln("The book `$name` does not exist.");
@@ -67,6 +72,8 @@ class ReadBookCommand extends Command
             $offset = 0;
             $length = $start;
         }
+
+        $book->setCashContext($context);
 
         $table = new BookEntriesTable($output, $this->bookService);
         $table
