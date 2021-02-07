@@ -61,6 +61,11 @@ class Book
      */
     private $cashContext;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isHidden;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -163,6 +168,18 @@ class Book
     public function setCashContext(?Context $cashContext): self
     {
         $this->cashContext = $cashContext;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return (bool) $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

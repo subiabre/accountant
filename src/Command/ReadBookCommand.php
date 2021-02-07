@@ -47,7 +47,7 @@ class ReadBookCommand extends Command
         $start = (int) $input->getArgument('max');
 
         if (!$name) {
-            $books = $this->bookRepository->findAll();
+            $books = $this->bookRepository->findBy(['isHidden' => false], ['name' => 'DESC']);
 
             $table = new BooksTable($output);
             $table
