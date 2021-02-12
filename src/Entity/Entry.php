@@ -14,21 +14,25 @@ class Entry
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"default"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"default"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="object")
+     * @Groups({"default"})
      */
     private $cost;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"default"})
      */
     private $date;
 

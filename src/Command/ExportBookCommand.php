@@ -40,9 +40,11 @@ class ExportBookCommand extends BookCommand
     {
         $filename = $input->getArgument('filename');
         $names = $input->getArgument('books');
+
+        /** @var Book[] */
         $books = empty($names) ? $this->bookRepository->findAll() : $this->bookRepository->findBy(['name' => $names]);
 
-        file_put_contents($filename, $this->serializer->serialize($books, 'json'));
+        file_put_contents($filename, $this->serializer->serialize($books, 'json', ['groups' => 'default']));
 
         return self::SUCCESS;
     }

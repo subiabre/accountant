@@ -24,11 +24,13 @@ class Book
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"default"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="object", length=255)
+     * @Groups({"default"})
      */
     private $currency;
 
@@ -38,21 +40,25 @@ class Book
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id", unique=true)}
      *      )
+     * @Groups({"default"})
      */
     private $entries;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"default"})
      */
     private $totalAmount;
 
     /**
      * @ORM\Column(type="object", nullable=true)
+     * @Groups({"default"})
      */
     private $totalCost;
 
     /**
      * @ORM\Column(type="object", nullable=true)
+     * @Groups({"default"})
      */
     private $averageCost;
 
