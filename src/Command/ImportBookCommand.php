@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Command;
+
 use App\Command\BookCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Command;
+
 use App\Command\BookCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,5 +28,7 @@ class ExportBookCommand extends BookCommand
         $data = json_encode($books, JSON_PRETTY_PRINT);
 
         file_put_contents($filename, $data);
+
+        return self::SUCCESS;
     }
 }
