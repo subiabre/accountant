@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Command\BookCommand;
+use App\Repository\BookRepository;
+use App\Service\BookService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,8 +15,14 @@ class ExportBookCommand extends BookCommand
     /** @var SerializerInterface */
     private $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(
+        SerializerInterface $serializer,
+        BookService $bookService,
+        BookRepository $bookRepository
+    )
     {
+        parent::__construct($bookRepository, $bookService);
+
         $this->serializer = $serializer;
     }
 
