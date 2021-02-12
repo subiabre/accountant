@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=EntryRepository::class)
@@ -14,25 +15,25 @@ class Entry
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="object")
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $cost;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $date;
 

@@ -8,6 +8,7 @@ use Brick\Money\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\MappedSuperclass
@@ -24,13 +25,13 @@ class Book
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="object", length=255)
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $currency;
 
@@ -40,25 +41,25 @@ class Book
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id", unique=true)}
      *      )
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $entries;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $totalAmount;
 
     /**
      * @ORM\Column(type="object", nullable=true)
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $totalCost;
 
     /**
      * @ORM\Column(type="object", nullable=true)
-     * @Groups({"default"})
+     * @Serializer\Groups({"default"})
      */
     private $averageCost;
 
