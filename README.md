@@ -7,7 +7,13 @@ So far is pretty basic, it does just what I need:
 * All in one place, just some keyboard commands away
 
 ## Install
-This app runs in PHP and uses composer as a dependency manager, so you must have those two installed before installing this repository.
+Before starting, make sure these are installed in your system.
+- php
+- php-intl
+- php-xml
+- composer
+
+Additionally, you'll need to install the driver for the database of your choice.
 
 Clone this repository:
 ```bash
