@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Book;
 use App\Service\BookService;
 use App\Table\BookEntriesTable;
 use App\Table\BooksTable;
@@ -22,6 +23,7 @@ class ReadBookCommand extends BookCommand
 
         $this->setContextOption();
         $this->setSortOption();
+        $this->setBookFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -50,6 +52,7 @@ class ReadBookCommand extends BookCommand
         }
 
         $book->setCashContext($this->getContextOption($input, $book));
+        $book->setFormat($this->getBookFormatOption($input, $book));
 
         $table = new BookEntriesTable($output, $this->bookService);
         $table

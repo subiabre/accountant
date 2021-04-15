@@ -38,6 +38,7 @@ class BookEntriesTable extends Table
 
         $tableBook->setCurrency($book->getCurrency());
         $tableBook->setCashContext($book->getCashContext());
+        $tableBook->setFormat($book->getFormat());
         
         $this->setHeaders([
             'Book',
@@ -57,10 +58,10 @@ class BookEntriesTable extends Table
                 $book->getName(),
                 $entry->getId(),
                 $entry->getAmount(),
-                $entry->getCost()->formatTo('en_US'),
+                $entry->getCost()->formatTo($tableBook->getFormat()),
                 $tableBook->getTotalAmount(),
-                $tableBook->getTotalCost()->formatTo('en_US'),
-                $tableBook->getAverageCost()->formatTo('en_US')
+                $tableBook->getTotalCost()->formatTo($tableBook->getFormat()),
+                $tableBook->getAverageCost()->formatTo($tableBook->getFormat())
             ];
         }
 

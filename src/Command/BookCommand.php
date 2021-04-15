@@ -62,4 +62,16 @@ abstract class BookCommand extends Command
     {
         $this->addOption('sort', null, $inputOption, 'Set the sort order (ASC/DESC)', Book::SORT_ASCENDING);
     }
+
+    protected function getBookFormatOption(InputInterface $input, Book $book): string
+    {
+        return $input->getOption('book-format')
+            ? $input->getOption('book-format')
+            : $book->getFormat();
+    }
+
+    protected function setBookFormatOption(int $inputOption = InputOption::VALUE_OPTIONAL)
+    {
+        $this->addOption('book-format', null, $inputOption, 'Format to display the currency', Book::DEFAULT_FORMAT);
+    }
 }

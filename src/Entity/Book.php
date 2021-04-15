@@ -18,9 +18,10 @@ class Book
 {
     public const SORT_ASCENDING = 'ASC';
     public const SORT_DESCENDING = 'DESC';
-    
+
     public const DEFAULT_CONTEXT = 2;
     public const DEFAULT_HIDDEN = false;
+    public const DEFAULT_FORMAT = 'en_US';
 
     /**
      * @ORM\Id
@@ -78,6 +79,11 @@ class Book
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isHidden;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $format;
 
     public function __construct()
     {
@@ -193,6 +199,18 @@ class Book
     public function setIsHidden(bool $isHidden): self
     {
         $this->isHidden = $isHidden;
+
+        return $this;
+    }
+
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
+    public function setFormat(string $format): self
+    {
+        $this->format = $format;
 
         return $this;
     }
