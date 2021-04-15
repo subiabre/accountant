@@ -38,7 +38,7 @@ abstract class BookCommand extends Command
 
     protected function setHiddenOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
-        $this->addOption('hidden', null, $inputOption, 'Set this book as hidden', false);
+        $this->addOption('hidden', null, $inputOption, 'Set this book as hidden', Book::DEFAULT_HIDDEN);
     }
 
     protected function getContextOption(InputInterface $input, Book $book): Context
@@ -50,16 +50,16 @@ abstract class BookCommand extends Command
 
     protected function setContextOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
-        $this->addOption('context', null, $inputOption, 'Number of decimals to preserve before rounding', 2);
+        $this->addOption('context', null, $inputOption, 'Number of decimals to preserve before rounding', Book::DEFAULT_CONTEXT);
     }
 
     protected function getSortOption(InputInterface $input): string
     {
-        return $input->getOption('sort') ? $input->getOption('sort') : 'ASC';
+        return $input->getOption('sort') ? $input->getOption('sort') : Book::SORT_ASCENDING;
     }
 
     protected function setSortOption(int $inputOption = InputOption::VALUE_OPTIONAL)
     {
-        $this->addOption('sort', null, $inputOption, 'Set the sort order (ASC/DESC)', 'ASC');
+        $this->addOption('sort', null, $inputOption, 'Set the sort order (ASC/DESC)', Book::SORT_ASCENDING);
     }
 }

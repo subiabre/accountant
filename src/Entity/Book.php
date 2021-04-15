@@ -16,6 +16,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Book
 {
+    public const SORT_ASCENDING = 'ASC';
+    public const SORT_DESCENDING = 'DESC';
+    
+    public const DEFAULT_CONTEXT = 2;
+    public const DEFAULT_HIDDEN = false;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

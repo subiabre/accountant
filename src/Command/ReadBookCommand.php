@@ -53,11 +53,13 @@ class ReadBookCommand extends BookCommand
 
         $table = new BookEntriesTable($output, $this->bookService);
         $table
+            ->setSortOrder($this->getSortOption($input))
             ->setBook(
                 $book, 
                 $this->getOffset($input), 
                 $this->getLength($input)
-            )->render();
+            )
+            ->render();
 
         return self::SUCCESS;
     }

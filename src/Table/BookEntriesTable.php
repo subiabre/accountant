@@ -12,11 +12,23 @@ class BookEntriesTable extends Table
 {
     private $bookService;
 
+    private $sortOrder;
+
+    private $entries;
+
     public function __construct(OutputInterface $outputInterface, BookService $bookService)
     {
         parent::__construct($outputInterface);
 
         $this->bookService = $bookService;
+        $this->sortOrder = Book::SORT_ASCENDING;
+    }
+
+    public function setSortOrder(string $sort): self
+    {
+        $this->sortOrder = $sort;
+
+        return $this;
     }
 
     public function setBook(Book $book, ?int $offset = 0, ?int $length = null): self
@@ -24,8 +36,9 @@ class BookEntriesTable extends Table
         $tableBook = new Book();
         $entries = [];
 
-        $tableBook->setCurrency($book->getCurrency());
-        $tableBook->setCashContext($book->getCashContext());
+        $tableBook->setCurrency($this->book->getCurrency());
+        $tableBook->setCashContext($this->book->getCashContext());
+        
         $this->setHeaders([
             'Book',
             'Entry #',
@@ -55,8 +68,21 @@ class BookEntriesTable extends Table
             $entries = array_slice($entries, $offset, $length);
         }
 
-        $this->addRows($entries);
+        $this->entries = $entries;
 
         return $this;
+    }
+
+    public function render()
+    {
+        $entries = $this->entries;
+        
+        if ($this->sortOrder == Book::SORT_DESCENDING) {
+            $entries = array_reverse($entries);
+        }
+
+        $this->addRows($entries);
+        
+        parent::render();
     }
 }
