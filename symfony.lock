@@ -230,6 +230,12 @@
     "symfony/polyfill-php80": {
         "version": "v1.22.0"
     },
+    "symfony/property-access": {
+        "version": "v5.2.4"
+    },
+    "symfony/property-info": {
+        "version": "v5.2.4"
+    },
     "symfony/proxy-manager-bridge": {
         "version": "v5.2.2"
     },

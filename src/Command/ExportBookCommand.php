@@ -8,6 +8,9 @@ use App\Service\BookService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ExportBookCommand extends BookCommand
@@ -16,21 +19,20 @@ class ExportBookCommand extends BookCommand
     private $serializer;
 
     public function __construct(
-        SerializerInterface $serializer,
         BookService $bookService,
         BookRepository $bookRepository
     )
     {
         parent::__construct($bookRepository, $bookService);
 
-        $this->serializer = $serializer;
+        $this->serializer = new Serializer([ new ObjectNormalizer()], [new JsonEncoder()]);
     }
 
     protected function configure()
     {
         $this->setName('account:export');
         $this->setAliases(['export']);
-        $this->setDescription('Export books data');
+        $this->setDescription('Export books data to a JSON encoded file');
 
         $this->addArgument('filename', InputArgument::REQUIRED, 'Name of the generated file');
         $this->addArgument('books', InputArgument::IS_ARRAY, 'Names of the books to be exported', []);
@@ -38,7 +40,7 @@ class ExportBookCommand extends BookCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = $input->getArgument('filename');
+        $filename = sprintf('%s.json', $input->getArgument('filename'));
         $names = $input->getArgument('books');
 
         /** @var Book[] */
