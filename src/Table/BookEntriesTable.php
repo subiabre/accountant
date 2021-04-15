@@ -36,8 +36,8 @@ class BookEntriesTable extends Table
         $tableBook = new Book();
         $entries = [];
 
-        $tableBook->setCurrency($this->book->getCurrency());
-        $tableBook->setCashContext($this->book->getCashContext());
+        $tableBook->setCurrency($book->getCurrency());
+        $tableBook->setCashContext($book->getCashContext());
         
         $this->setHeaders([
             'Book',
