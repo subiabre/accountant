@@ -22,6 +22,7 @@ class NewBookCommand extends BookCommand
         
         $this->setContextOption();
         $this->setHiddenOption();
+        $this->setBookFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,6 +43,7 @@ class NewBookCommand extends BookCommand
             ->setCurrency($currency)
             ->setCashContext($this->getContextOption($input, $book))
             ->setIsHidden($this->getHiddenOption($input, $book))
+            ->setFormat($this->getBookFormatOption($input, $book))
             ;
 
         $this->bookService->saveNewBook($book);
