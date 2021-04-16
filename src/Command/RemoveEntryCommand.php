@@ -12,29 +12,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveEntryCommand extends Command
+class RemoveEntryCommand extends AbstractBookCommand
 {
-    /** @var BookRepository */
-    private $bookRepository;
-
-    /** @var EntryRepository */
-    private $entryRepository;
-
-    /** @var BookService */
-    private $bookService;
-
-    public function __construct(
-        BookRepository $bookRepository, 
-        EntryRepository $entryRepository,
-        BookService $bookService
-    ){
-        parent::__construct();
-
-        $this->bookRepository = $bookRepository;
-        $this->entryRepository = $entryRepository;
-        $this->bookService = $bookService;
-    }
-
     protected function configure()
     {
         $this->setName('account:remove:entry');
@@ -50,8 +29,8 @@ class RemoveEntryCommand extends Command
         $name = $input->getArgument('name');
         $id = $input->getArgument('id');
 
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
-        $entry = $this->entryRepository->find($id);
+        $book = $this->bookService->findBookByName($name);
+        $entry = $this->bookService->findEntry($id);
 
         if (!$book || !$entry) {
             $output->writeln("The book `$name` or the entry `$entry` does not exist.");

@@ -3,13 +3,12 @@
 namespace App\Command;
 
 use App\Entity\Book;
-use App\Service\BookService;
 use Brick\Money\Currency;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewBookCommand extends BookCommand
+class NewBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
@@ -20,9 +19,9 @@ class NewBookCommand extends BookCommand
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
         $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
         
-        $this->setContextOption();
         $this->setHiddenOption();
-        $this->setBookFormatOption();
+        $this->setCashContextOption();
+        $this->setCashFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,10 +29,10 @@ class NewBookCommand extends BookCommand
         $name = $input->getArgument('name');
         $currency = Currency::of($input->getArgument('currency'));
 
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $book = $this->bookService->findBookByName($name);
 
         if ($book) {
-            $output->writeln(sprintf(BookService::BOOK_ALREADY, $name));
+            $output->writeln(sprintf(Book::MESSAGE_ALREADY, $name));
             return self::FAILURE;
         }
 
@@ -41,14 +40,14 @@ class NewBookCommand extends BookCommand
         $book
             ->setName($name)
             ->setCurrency($currency)
-            ->setCashContext($this->getContextOption($input, $book))
             ->setIsHidden($this->getHiddenOption($input, $book))
-            ->setFormat($this->getBookFormatOption($input, $book))
+            ->setCashContext($this->getCashContextOption($input, $book))
+            ->setCashFormat($this->getCashFormatOption($input, $book))
             ;
 
         $this->bookService->saveNewBook($book);
 
-        $output->writeln(sprintf(BookService::BOOK_CREATED, $name));
+        $output->writeln(sprintf(Book::MESSAGE_CREATED, $name));
 
         return self::SUCCESS;
     }

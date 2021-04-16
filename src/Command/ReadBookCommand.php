@@ -3,14 +3,13 @@
 namespace App\Command;
 
 use App\Entity\Book;
-use App\Service\BookService;
 use App\Table\BookEntriesTable;
 use App\Table\BooksTable;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReadBookCommand extends BookCommand
+class ReadBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
@@ -21,9 +20,9 @@ class ReadBookCommand extends BookCommand
         $this->addArgument('name', InputArgument::OPTIONAL, 'Book name to be read');
         $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
 
-        $this->setContextOption();
+        $this->setCashContextOption();
+        $this->setCashFormatOption();
         $this->setSortOption();
-        $this->setBookFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -44,15 +43,15 @@ class ReadBookCommand extends BookCommand
             return self::SUCCESS;
         }
 
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
-            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
+            $output->writeln(sprintf(Book::MESSAGE_MISSING, $name));
             return self::FAILURE;
         }
 
-        $book->setCashContext($this->getContextOption($input, $book));
-        $book->setFormat($this->getBookFormatOption($input, $book));
+        $book->setCashContext($this->getCashContextOption($input, $book));
+        $book->setCashFormat($this->getCashFormatOption($input, $book));
 
         $table = new BookEntriesTable($output, $this->bookService);
         $table

@@ -2,32 +2,14 @@
 
 namespace App\Command;
 
-use App\Repository\BookRepository;
-use App\Service\BookService;
-use Symfony\Component\Console\Command\Command;
+use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class RemoveBookCommand extends Command
+class RemoveBookCommand extends AbstractBookCommand
 {
-    /** @var BookRepository */
-    private $bookRepository;
-
-    /** @var BookService */
-    private $bookService;
-
-    public function __construct(
-        BookRepository $bookRepository, 
-        BookService $bookService
-    ){
-        parent::__construct();
-
-        $this->bookRepository = $bookRepository;
-        $this->bookService = $bookService;
-    }
-
     protected function configure()
     {
         $this->setName('account:remove:book');
@@ -41,14 +23,14 @@ class RemoveBookCommand extends Command
     {
         $name = $input->getArgument('name');
 
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
-            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
+            $output->writeln(sprintf(Book::MESSAGE_MISSING, $name));
             return self::FAILURE;
         }
 
-        $output->writeln(sprintf(BookService::BOOK_ENTRIES, $name, count($book->getEntries())));
+        $output->writeln(sprintf(Book::MESSAGE_ENTRIES, $name, count($book->getEntries())));
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion("Do you want to delete this book? (y/n): ", false);
@@ -59,7 +41,7 @@ class RemoveBookCommand extends Command
 
         $this->bookService->deleteBook($book);
 
-        $output->writeln(sprintf(BookService::BOOK_DELETED, $name));
+        $output->writeln(sprintf(Book::MESSAGE_DELETED, $name));
         
         return self::SUCCESS;
     }

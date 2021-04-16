@@ -2,12 +2,11 @@
 
 namespace App\Command;
 
-use App\Command\BookCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImportBookCommand extends BookCommand
+class ImportBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {

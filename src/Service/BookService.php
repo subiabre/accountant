@@ -10,13 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BookService
 {
-    public const BOOK_CREATED = "The book `%s` was successfully created.";
-    public const BOOK_UPDATED = "The book `%s` was successfully updated.";
-    public const BOOK_MISSING = "The book `%s` does not exist.";
-    public const BOOK_ALREADY = "The book `%s` already exists.";
-    public const BOOK_DELETED = "The book `%s` was successfully deleted.";
-    public const BOOK_ENTRIES = "The book `%s` contains %s entries.";
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -38,6 +31,16 @@ class BookService
         $this->saveBook($book);
     }
 
+    public function findBook(int $bookId): ?Book
+    {
+        return $this->em->find(Book::class, $bookId);
+    }
+
+    public function findBookByName(string $bookName): ?Book
+    {
+        return $this->em->getRepository(Book::class)->findOneBy(['name' => $bookName]);
+    }
+
     public function addEntry(Entry $entry, Book $book): Book
     {
         $book->addEntry($entry);
@@ -56,6 +59,11 @@ class BookService
         $book->setAverageCost($this->calcAverageCost($book));
 
         return $book;
+    }
+
+    public function findEntry(int $entryId): ?Entry
+    {
+        return $this->em->find(Entry::class, $entryId);
     }
 
     public function deleteBook(Book $book)

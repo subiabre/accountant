@@ -2,36 +2,17 @@
 
 namespace App\Command;
 
+use App\Entity\Book;
 use App\Entity\Entry;
-use App\Repository\BookRepository;
-use App\Service\BookService;
 use App\Table\BookEntriesTable;
-use Brick\Money\Currency;
 use Brick\Money\Money;
 use DateTime;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewEntryCommand extends Command
+class NewEntryCommand extends AbstractBookCommand
 {
-    /** @var BookRepository */
-    private $bookRepository;
-
-    /** @var BookService */
-    private $bookService;
-
-    public function __construct(
-        BookRepository $bookRepository, 
-        BookService $bookService
-    ){
-        parent::__construct();
-
-        $this->bookRepository = $bookRepository;
-        $this->bookService = $bookService;
-    }
-
     protected function configure()
     {
         $this->setName('account:new:entry');
@@ -46,10 +27,10 @@ class NewEntryCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
-            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
+            $output->writeln(sprintf(Book::MESSAGE_MISSING, $name));
             return self::FAILURE;
         }
 

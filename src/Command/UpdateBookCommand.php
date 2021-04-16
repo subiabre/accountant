@@ -2,12 +2,12 @@
 
 namespace App\Command;
 
-use App\Service\BookService;
+use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateBookCommand extends BookCommand
+class UpdateBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
@@ -17,30 +17,30 @@ class UpdateBookCommand extends BookCommand
 
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name');
 
-        $this->setContextOption();
         $this->setHiddenOption();
-        $this->setBookFormatOption();
+        $this->setCashContextOption();
+        $this->setCashFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $book = $this->bookRepository->findOneBy(['name' => $name]);
+        $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
-            $output->writeln(sprintf(BookService::BOOK_MISSING, $name));
+            $output->writeln(sprintf(Book::MESSAGE_MISSING, $name));
             return self::FAILURE;
         }
 
         $book
-            ->setCashContext($this->getContextOption($input, $book))
             ->setIsHidden($this->getHiddenOption($input, $book))
-            ->setFormat($this->getBookFormatOption($input, $book))
+            ->setCashContext($this->getCashContextOption($input, $book))
+            ->setCashFormat($this->getCashFormatOption($input, $book))
             ;
 
         $this->bookService->saveBook($book);
 
-        $output->writeln(sprintf(BookService::BOOK_UPDATED, $name));
+        $output->writeln(sprintf(Book::MESSAGE_UPDATED, $name));
 
         return self::SUCCESS;
     }

@@ -36,9 +36,10 @@ class BookEntriesTable extends Table
         $tableBook = new Book();
         $entries = [];
 
+        $cashFormat = $book->getCashFormat();
+
         $tableBook->setCurrency($book->getCurrency());
         $tableBook->setCashContext($book->getCashContext());
-        $tableBook->setFormat($book->getFormat());
         
         $this->setHeaders([
             'Book',
@@ -58,11 +59,15 @@ class BookEntriesTable extends Table
                 $book->getName(),
                 $entry->getId(),
                 $entry->getAmount(),
-                $entry->getCost()->formatTo($tableBook->getFormat()),
+                $entry->getCost()->formatTo($cashFormat),
                 $tableBook->getTotalAmount(),
-                $tableBook->getTotalCost()->formatTo($tableBook->getFormat()),
-                $tableBook->getAverageCost()->formatTo($tableBook->getFormat())
+                $tableBook->getTotalCost()->formatTo($cashFormat),
+                $tableBook->getAverageCost()->formatTo($cashFormat)
             ];
+        }
+
+        if ($this->sortOrder == Book::SORT_DESCENDING) {
+            $entries = array_reverse($entries);
         }
 
         if ($offset !== 0 || $length) {
@@ -77,10 +82,6 @@ class BookEntriesTable extends Table
     public function render()
     {
         $entries = $this->entries;
-        
-        if ($this->sortOrder == Book::SORT_DESCENDING) {
-            $entries = array_reverse($entries);
-        }
 
         $this->addRows($entries);
         

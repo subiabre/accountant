@@ -16,12 +16,19 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Book
 {
+    public const MESSAGE_CREATED = "The book `%s` was successfully created.";
+    public const MESSAGE_UPDATED = "The book `%s` was successfully updated.";
+    public const MESSAGE_MISSING = "The book `%s` does not exist.";
+    public const MESSAGE_ALREADY = "The book `%s` already exists.";
+    public const MESSAGE_DELETED = "The book `%s` was successfully deleted.";
+    public const MESSAGE_ENTRIES = "The book `%s` contains %s entries.";
+
     public const SORT_ASCENDING = 'ASC';
     public const SORT_DESCENDING = 'DESC';
 
-    public const DEFAULT_CONTEXT = 2;
     public const DEFAULT_HIDDEN = false;
-    public const DEFAULT_FORMAT = 'en_US';
+    public const DEFAULT_CASH_CONTEXT = 2;
+    public const DEFAULT_CASH_FORMAT = 'en_US';
 
     /**
      * @ORM\Id
@@ -71,19 +78,19 @@ class Book
     private $averageCost;
 
     /**
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $cashContext;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isHidden;
 
     /**
+     * @ORM\Column(type="object", nullable=true)
+     */
+    private $cashContext;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
-    private $format;
+    private $cashFormat;
 
     public function __construct()
     {
@@ -179,18 +186,6 @@ class Book
         return $this;
     }
 
-    public function getCashContext(): ?Context
-    {
-        return $this->cashContext;
-    }
-
-    public function setCashContext(?Context $cashContext): self
-    {
-        $this->cashContext = $cashContext;
-
-        return $this;
-    }
-
     public function isHidden(): bool
     {
         return (bool) $this->isHidden;
@@ -203,14 +198,26 @@ class Book
         return $this;
     }
 
-    public function getFormat(): string
+    public function getCashContext(): ?Context
     {
-        return $this->format;
+        return $this->cashContext;
     }
 
-    public function setFormat(string $format): self
+    public function setCashContext(?Context $cashContext): self
     {
-        $this->format = $format;
+        $this->cashContext = $cashContext;
+
+        return $this;
+    }
+
+    public function getCashFormat(): string
+    {
+        return $this->cashFormat;
+    }
+
+    public function setCashFormat(string $cashFormat): self
+    {
+        $this->cashFormat = $cashFormat;
 
         return $this;
     }

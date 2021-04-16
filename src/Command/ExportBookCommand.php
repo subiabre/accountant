@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Command\BookCommand;
 use App\Repository\BookRepository;
 use App\Service\BookService;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +12,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ExportBookCommand extends BookCommand
+class ExportBookCommand extends AbstractBookCommand
 {
     /** @var SerializerInterface */
     private $serializer;
