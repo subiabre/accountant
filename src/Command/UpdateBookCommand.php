@@ -20,6 +20,7 @@ class UpdateBookCommand extends AbstractBookCommand
         $this->setHiddenOption();
         $this->setCashContextOption();
         $this->setCashFormatOption();
+        $this->setDateFormatOption();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,6 +37,7 @@ class UpdateBookCommand extends AbstractBookCommand
             ->setIsHidden($this->getHiddenOption($input, $book))
             ->setCashContext($this->getCashContextOption($input, $book))
             ->setCashFormat($this->getCashFormatOption($input, $book))
+            ->setDateFormat($this->getDateFormatOption($input, $book))
             ;
 
         $this->bookService->saveBook($book);

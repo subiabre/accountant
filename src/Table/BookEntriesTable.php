@@ -37,6 +37,7 @@ class BookEntriesTable extends Table
         $entries = [];
 
         $cashFormat = $book->getCashFormat();
+        $dateFormat = $book->getDateFormat();
 
         $tableBook->setCurrency($book->getCurrency());
         $tableBook->setCashContext($book->getCashContext());
@@ -44,6 +45,7 @@ class BookEntriesTable extends Table
         $this->setHeaders([
             'Book',
             'Entry #',
+            'Date',
             'Amount',
             'Cost',
             'Total Amount',
@@ -58,6 +60,7 @@ class BookEntriesTable extends Table
             $entries[] = [
                 $book->getName(),
                 $entry->getId(),
+                $entry->getDate()->format($dateFormat),
                 $entry->getAmount(),
                 $entry->getCost()->formatTo($cashFormat),
                 $tableBook->getTotalAmount(),

@@ -52,9 +52,11 @@ abstract class AbstractBookCommand extends Command
 
     protected function getCashContextOption(InputInterface $input, Book $book): Context
     {
-        return $input->getOption('cash-context') 
-            ? new CustomContext($input->getOption('cash-context')) 
-            : $book->getCashContext();
+        if ($input->getOption('cash-context') == null) {
+            return $book->getCashContext() ? $book->getCashContext() : Book::DEFAULT_CASH_CONTEXT;
+        } else {
+            return new CustomContext($input->getOption('cash-context'));
+        }
     }
 
     protected function setCashContextOption(int $inputOption = InputOption::VALUE_OPTIONAL)
@@ -70,9 +72,11 @@ abstract class AbstractBookCommand extends Command
 
     protected function getCashFormatOption(InputInterface $input, Book $book): string
     {
-        return $input->getOption('cash-format')
-            ? $input->getOption('cash-format')
-            : $book->getCashFormat();
+        if ($input->getOption('cash-format') == null) {
+            return $book->getCashFormat() ? $book->getCashFormat() : Book::DEFAULT_CASH_FORMAT;
+        } else {
+            return $input->getOption('cash-format');
+        }
     }
 
     protected function setCashFormatOption(int $inputOption = InputOption::VALUE_OPTIONAL)
@@ -83,6 +87,26 @@ abstract class AbstractBookCommand extends Command
             $inputOption, 
             'Format to display the currency', 
             Book::DEFAULT_CASH_FORMAT
+        );
+    }
+
+    protected function getDateFormatOption(InputInterface $input, Book $book): string
+    {
+        if ($input->getOption('date-format') == null) {
+            return $book->getDateFormat() ? $book->getDateFormat() : Book::DEFAULT_DATE_FORMAT;
+        } else {
+            return $input->getOption('date-format');
+        }
+    }
+
+    protected function setDateFormatOption(int $inputOption = InputOption::VALUE_OPTIONAL)
+    {
+        $this->addOption(
+            'date-format',
+            null,
+            $inputOption,
+            'Format to display the dates',
+            Book::DEFAULT_DATE_FORMAT
         );
     }
 

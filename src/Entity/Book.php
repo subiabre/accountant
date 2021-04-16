@@ -29,6 +29,7 @@ class Book
     public const DEFAULT_HIDDEN = false;
     public const DEFAULT_CASH_CONTEXT = 2;
     public const DEFAULT_CASH_FORMAT = 'en_US';
+    public const DEFAULT_DATE_FORMAT = 'Y-m-d';
 
     /**
      * @ORM\Id
@@ -88,9 +89,14 @@ class Book
     private $cashContext;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $cashFormat;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dateFormat;
 
     public function __construct()
     {
@@ -210,7 +216,7 @@ class Book
         return $this;
     }
 
-    public function getCashFormat(): string
+    public function getCashFormat(): ?string
     {
         return $this->cashFormat;
     }
@@ -218,6 +224,18 @@ class Book
     public function setCashFormat(string $cashFormat): self
     {
         $this->cashFormat = $cashFormat;
+
+        return $this;
+    }
+
+    public function getDateFormat(): ?string
+    {
+        return $this->dateFormat;
+    }
+
+    public function setDateFormat(string $dateFormat): self
+    {
+        $this->dateFormat = $dateFormat;
 
         return $this;
     }

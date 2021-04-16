@@ -22,6 +22,7 @@ class ReadBookCommand extends AbstractBookCommand
 
         $this->setCashContextOption();
         $this->setCashFormatOption();
+        $this->setDateFormatOption();
         $this->setSortOption();
     }
 
@@ -52,6 +53,7 @@ class ReadBookCommand extends AbstractBookCommand
 
         $book->setCashContext($this->getCashContextOption($input, $book));
         $book->setCashFormat($this->getCashFormatOption($input, $book));
+        $book->setDateFormat($this->getDateFormatOption($input, $book));
 
         $table = new BookEntriesTable($output, $this->bookService);
         $table
