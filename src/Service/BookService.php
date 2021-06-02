@@ -96,6 +96,10 @@ class BookService
         $entries = $book->getEntries();
         $money = Money::of(0, $book->getCurrency(), $book->getCashContext());
 
+        if (count($entries) < 1) {
+            return $money;
+        }
+
         foreach ($entries as $entry) {
             $money = $money->plus($entry->getCost()->toRational(), RoundingMode::UP);
         }
@@ -105,6 +109,12 @@ class BookService
 
     public function calcAverageCost(Book $book): Money
     {
-        return $this->calcTotalCost($book)->dividedBy($this->calcTotalAmount($book), RoundingMode::UP);
+        $totalAmount = $this->calcTotalAmount($book);
+
+        if ($totalAmount == (float) 0) {
+            return Money::of(0, $book->getCurrency(), $book->getCashContext());
+        }
+
+        return $this->calcTotalCost($book)->dividedBy($totalAmount, RoundingMode::UP);
     }
 }
