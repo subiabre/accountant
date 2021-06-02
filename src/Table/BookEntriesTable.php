@@ -41,6 +41,7 @@ class BookEntriesTable extends Table
 
         $tableBook->setCurrency($book->getCurrency());
         $tableBook->setCashContext($book->getCashContext());
+        $tableBook->setCashFormat($book->getCashFormat());
         
         $this->setHeaders([
             'Book',
