@@ -2,12 +2,7 @@
 
 namespace App\Command;
 
-use App\Repository\BookRepository;
-use App\Repository\EntryRepository;
-use App\Service\BookService;
 use App\Table\BookEntriesTable;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

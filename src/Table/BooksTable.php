@@ -17,7 +17,8 @@ class BooksTable extends Table
             'Book',
             'Total Amount',
             'Total Cost',
-            'Average Cost'
+            'Average Cost',
+            'Cash Format'
         ]);
     }
 
@@ -25,11 +26,14 @@ class BooksTable extends Table
     {
         /** @var Book */
         foreach ($books as $book) {
+            $cashFormat = $book->getCashFormat();
+
             $this->addRow([
                 $book->getName(),
                 $book->getTotalAmount(),
-                $book->getTotalCost()->formatTo('en_US'),
-                $book->getAverageCost()->formatTo('en_US')
+                $book->getTotalCost()->formatTo($cashFormat),
+                $book->getAverageCost()->formatTo($cashFormat),
+                $cashFormat
             ]);
         }
 

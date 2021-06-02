@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\MappedSuperclass
- * @ORM\Entity(repositoryClass=BookRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\BookRepository::class)
  */
 class Book
 {
