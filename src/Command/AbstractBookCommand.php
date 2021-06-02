@@ -52,8 +52,8 @@ abstract class AbstractBookCommand extends Command
 
     protected function getCashContextOption(InputInterface $input, Book $book): Context
     {
-        if ($input->getOption('cash-context') == null) {
-            return $book->getCashContext() ? $book->getCashContext() : Book::DEFAULT_CASH_CONTEXT;
+        if (!$input->getParameterOption('--cash-context')) {
+            return $book->getCashContext() ? $book->getCashContext() : new CustomContext(Book::DEFAULT_CASH_CONTEXT);
         } else {
             return new CustomContext($input->getOption('cash-context'));
         }
@@ -72,7 +72,7 @@ abstract class AbstractBookCommand extends Command
 
     protected function getCashFormatOption(InputInterface $input, Book $book): string
     {
-        if ($input->getOption('cash-format') == null) {
+        if (!$input->getParameterOption('--cash-format')) {
             return $book->getCashFormat() ? $book->getCashFormat() : Book::DEFAULT_CASH_FORMAT;
         } else {
             return $input->getOption('cash-format');
@@ -92,7 +92,7 @@ abstract class AbstractBookCommand extends Command
 
     protected function getDateFormatOption(InputInterface $input, Book $book): string
     {
-        if ($input->getOption('date-format') == null) {
+        if (!$input->getParameterOption('--date-format')) {
             return $book->getDateFormat() ? $book->getDateFormat() : Book::DEFAULT_DATE_FORMAT;
         } else {
             return $input->getOption('date-format');

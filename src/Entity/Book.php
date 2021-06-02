@@ -29,6 +29,7 @@ class Book
     public const DEFAULT_HIDDEN = false;
     public const DEFAULT_CASH_CONTEXT = 2;
     public const DEFAULT_CASH_FORMAT = 'en_US';
+    public const DEFAULT_CASH_CURRENCY = 'USD';
     public const DEFAULT_DATE_FORMAT = 'Y-m-d';
 
     /**

@@ -17,7 +17,7 @@ class UpdateBookCommand extends AbstractBookCommand
         $this->setDescription('Update an accounting book');
 
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name');
-        $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
+        $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book');
 
         $this->setHiddenOption();
         $this->setCashContextOption();
@@ -28,14 +28,17 @@ class UpdateBookCommand extends AbstractBookCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $currency = Currency::of($input->getArgument('currency'));
-
         $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
             $output->writeln(sprintf(Book::MESSAGE_MISSING, $name));
             return self::FAILURE;
         }
+
+        $currency = $input->getArgument('currency') 
+            ? Currency::of($input->getArgument('currency')) 
+            : $book->getCurrency()
+            ;
 
         $book
             ->setCurrency($currency)

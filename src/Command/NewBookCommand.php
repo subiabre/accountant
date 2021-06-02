@@ -16,8 +16,13 @@ class NewBookCommand extends AbstractBookCommand
         $this->setAliases(['new']);
         $this->setDescription('Create a new accounting book');
 
-        $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');
-        $this->addArgument('currency', InputArgument::OPTIONAL, 'Default currency code for entries in this book', 'USD');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Name for this book, must be unique');
+        $this->addArgument(
+            'currency', 
+            InputArgument::OPTIONAL, 
+            'Default currency code for entries in this book', 
+            Book::DEFAULT_CASH_CURRENCY
+        );
         
         $this->setHiddenOption();
         $this->setCashContextOption();
