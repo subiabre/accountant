@@ -41,7 +41,7 @@ class ImportBookCommand extends AbstractBookCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = rtrim($input->getArgument('filename'), '.json');
+        $filename = sprintf('%s.json', rtrim($input->getArgument('filename'), '.json'));
 
         if (!file_exists($filename)) {
             $output->writeln(sprintf('<error>The file %s does not exist.</error>', $filename));
