@@ -2,34 +2,20 @@
 
 namespace App\Command;
 
-use App\Repository\BookRepository;
-use App\Service\BookService;
-use Doctrine\Common\Annotations\AnnotationReader;
+use App\Entity\Book;
+use App\Entity\Entry;
+use Brick\Money\Context\CustomContext;
+use Brick\Money\Currency;
+use Brick\Money\Money;
+use DateTime;
+use DateTimeZone;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ImportBookCommand extends AbstractBookCommand
 {
-    /** @var SerializerInterface */
-    private $serializer;
-
-    public function __construct(
-        BookService $bookService,
-        BookRepository $bookRepository
-    )
-    {
-        parent::__construct($bookRepository, $bookService);
-
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $this->serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)]);
-    }
-
     protected function configure()
     {
         $this->setName('account:import');
@@ -59,16 +45,66 @@ class ImportBookCommand extends AbstractBookCommand
             $book = $this->bookService->findBookByName($data['name']);
             
             if ($book) {
-                $this->serializer->deserialize($data, Book::class, 'json', [
-                    AbstractNormalizer::OBJECT_TO_POPULATE => $book
-                ]);
+                $output->writeln(sprintf(Book::MESSAGE_ALREADY, $book->getName()));
 
-                $this->bookService->saveBook($book);
+                $helper = $this->getHelper('question');
+                $question = new ConfirmationQuestion('Do you want to overwrite it? (y/n): ', false);
+
+                if ($helper->ask($input, $output, $question)) {
+                    $this->bookService->deleteBook($book);
+                    $this->bookService->saveNewBook($this->processBookData($data, $book));
+    
+                    $output->writeln(sprintf(Book::MESSAGE_UPDATED, $data['name']));
+                } else {
+                    continue;
+                }
             } else {
-                $this->bookService->saveNewBook($this->serializer->deserialize($data, Book::class, 'json'));
+                $this->bookService->saveNewBook($this->processBookData($data, new Book));
+
+                $output->writeln(sprintf(Book::MESSAGE_CREATED, $data['name']));
             }
         }
 
         return self::SUCCESS;
+    }
+
+    private function processBookData(array $data, Book $book): Book
+    {
+        $book
+            ->setName($data['name'])
+            ->setCurrency(Currency::of($data['currency']['currencyCode']))
+            ->setIsHidden($data['hidden'])
+            ->setCashContext(new CustomContext(
+                    $data['cashContext']['scale'], 
+                    $data['cashContext']['step'])
+                )
+            ->setCashFormat($data['cashFormat'])
+            ->setDateFormat($data['dateFormat'])
+            ;
+
+        foreach ($data['entries'] as $entryData) {
+            $entry = new Entry();
+            $entry->setDate(
+                DateTime::createFromFormat(
+                    'U',
+                    $entryData['date']['timestamp'],
+                    new DateTimeZone($entryData['date']['timezone']['name'])
+                )
+            );
+            $entry->setAmount(floatval($entryData['amount']));
+            $entry->setCost(
+                Money::of(
+                    floatval(sprintf('%d.%d', 
+                        $entryData['cost']['amount']['integralPart'],
+                        $entryData['cost']['amount']['fractionalPart']
+                    )), 
+                    Currency::of($data['currency']['currencyCode'])
+                )
+            );
+
+            $book = $this->bookService->addEntry($entry, $book);
+        }
+
+        return $book;
     }
 }

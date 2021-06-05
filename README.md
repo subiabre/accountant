@@ -67,7 +67,7 @@ accountant add bros_doge 100 0.9
 - [x] Allow books to be hidden from the book listing, e.g: `update some_book --hidden=true`
 - [x] Add support to change rounding context of books on the fly, e.g: `read some_book --cash-context=4`
 - [x] Add support to set and change the book currency formatting, e.g: `read some_book --cash-format=es_AR`
-- [x] Add support to export data to JSON/CSV, e.g: `export file book`
-- [ ] Add support to import data from an accountant generated JSON file
+- [x] Add support to export data to JSON/CSV, e.g: `export file book1 book2`
+- [x] Add support to import data from an accountant generated JSON file, e.g: `import file`
 - [ ] Add encryption for database going data
 - [ ] Add password option to books, e.g: `update some_book --password=MyPassword`
