@@ -20,7 +20,7 @@ class ImportBookCommand extends AbstractBookCommand
     {
         $this->setName('account:import');
         $this->setAliases(['import']);
-        $this->setDescription('Import books data');
+        $this->setDescription('Import books data from an accountant generated JSON file');
 
         $this->addArgument('filename', InputArgument::REQUIRED, 'Name of the JSON file');
     }
