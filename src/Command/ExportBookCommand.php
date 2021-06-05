@@ -18,8 +18,8 @@ class ExportBookCommand extends AbstractBookCommand
     private $serializer;
 
     public function __construct(
-        BookService $bookService,
-        BookRepository $bookRepository
+        BookRepository $bookRepository,
+        BookService $bookService
     )
     {
         parent::__construct($bookRepository, $bookService);
@@ -39,7 +39,7 @@ class ExportBookCommand extends AbstractBookCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = sprintf('%s.json', $input->getArgument('filename'));
+        $filename = sprintf('%s.json', rtrim($input->getArgument('filename'), '.json'));
         $names = $input->getArgument('books');
 
         /** @var Book[] */
