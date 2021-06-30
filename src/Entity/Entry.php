@@ -11,6 +11,11 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Entry
 {
+    public const BUY = 'buy';
+    public const SELL = 'sell';
+
+    public const MESSAGE_INVALID_TYPE = 'Valid entry types are: %s, %s is not a valid type';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -18,6 +23,12 @@ class Entry
      * @Serializer\Groups({"default"})
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string")
+     * @Serializer\Groups({"default"})
+     */
+    private $type;
 
     /**
      * @ORM\Column(type="float")
@@ -29,7 +40,7 @@ class Entry
      * @ORM\Column(type="object")
      * @Serializer\Groups({"default"})
      */
-    private $cost;
+    private $value;
 
     /**
      * @ORM\Column(type="date")
@@ -40,6 +51,18 @@ class Entry
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
     public function getAmount(): ?float
@@ -54,14 +77,14 @@ class Entry
         return $this;
     }
 
-    public function getCost(): ?Money
+    public function getValue(): ?Money
     {
-        return $this->cost;
+        return $this->value;
     }
 
-    public function setCost(Money $cost): self
+    public function setValue(Money $value): self
     {
-        $this->cost = $cost;
+        $this->value = $value;
 
         return $this;
     }

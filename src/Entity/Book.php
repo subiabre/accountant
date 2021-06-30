@@ -80,6 +80,18 @@ class Book
     private $averageCost;
 
     /**
+     * @ORM\Column(type="object", nullable=true)
+     * @Serializer\Groups({"default"})
+     */
+    private $totalProfit;
+
+    /**
+     * @ORM\Column(type="object", nullable=true)
+     * @Serializer\Groups({"default"})
+     */
+    private $totalDifference;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isHidden;
@@ -189,6 +201,30 @@ class Book
     public function setAverageCost(?Money $averageCost): self
     {
         $this->averageCost = $averageCost;
+
+        return $this;
+    }
+
+    public function getTotalProfit(): ?Money
+    {
+        return $this->totalProfit;
+    }
+
+    public function setTotalProfit(?Money $totalProfit): self
+    {
+        $this->totalProfit = $totalProfit;
+
+        return $this;
+    }
+
+    public function getTotalDifference(): ?Money
+    {
+        return $this->totalDifference;
+    }
+
+    public function setTotalDifference(?Money $totalDifference): self
+    {
+        $this->totalDifference = $totalDifference;
 
         return $this;
     }

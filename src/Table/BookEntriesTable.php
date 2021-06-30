@@ -47,11 +47,14 @@ class BookEntriesTable extends Table
             'Book',
             'Entry #',
             'Date',
+            'Type',
             'Amount',
             'Cost',
             'Total Amount',
             'Total Cost',
-            'Average Cost'
+            'Average Cost',
+            'Total Profit',
+            'Difference'
         ]);
 
         /** @var Entry */
@@ -62,11 +65,14 @@ class BookEntriesTable extends Table
                 $book->getName(),
                 $entry->getId(),
                 $entry->getDate()->format($dateFormat),
+                $entry->getType(),
                 $entry->getAmount(),
-                $entry->getCost()->formatTo($cashFormat),
+                $entry->getValue()->formatTo($cashFormat),
                 $tableBook->getTotalAmount(),
                 $tableBook->getTotalCost()->formatTo($cashFormat),
-                $tableBook->getAverageCost()->formatTo($cashFormat)
+                $tableBook->getAverageCost()->formatTo($cashFormat),
+                $tableBook->getTotalProfit()->formatTo($cashFormat),
+                $tableBook->getTotalDifference()->formatTo($cashFormat)
             ];
         }
 

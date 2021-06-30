@@ -18,6 +18,8 @@ class BooksTable extends Table
             'Total Amount',
             'Total Cost',
             'Average Cost',
+            'Total Profit',
+            'Difference',
             'Currency',
             'Cash Format',
         ]);
@@ -34,6 +36,7 @@ class BooksTable extends Table
                 $book->getTotalAmount(),
                 $book->getTotalCost()->formatTo($cashFormat),
                 $book->getAverageCost()->formatTo($cashFormat),
+                $book->getTotalProfit()->formatTo($cashFormat),
                 $book->getCurrency()->getCurrencyCode(),
                 $cashFormat
             ]);

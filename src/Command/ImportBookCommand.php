@@ -84,23 +84,24 @@ class ImportBookCommand extends AbstractBookCommand
 
         foreach ($data['entries'] as $entryData) {
             $entry = new Entry();
-            $entry->setDate(
-                DateTime::createFromFormat(
-                    'U',
-                    $entryData['date']['timestamp'],
-                    new DateTimeZone($entryData['date']['timezone']['name'])
-                )
-            );
-            $entry->setAmount(floatval($entryData['amount']));
-            $entry->setCost(
-                Money::of(
-                    floatval(sprintf('%d.%d', 
-                        $entryData['cost']['amount']['integralPart'],
-                        $entryData['cost']['amount']['fractionalPart']
-                    )), 
-                    Currency::of($data['currency']['currencyCode'])
-                )
-            );
+            $entry
+                ->setType(strval($entryData['type']))
+                ->setDate(
+                    DateTime::createFromFormat(
+                        'U',
+                        $entryData['date']['timestamp'],
+                        new DateTimeZone($entryData['date']['timezone']['name'])
+                    ))
+                ->setAmount(floatval($entryData['amount']))
+                ->setValue(
+                    Money::of(
+                        floatval(sprintf('%d.%d', 
+                            $entryData['cost']['amount']['integralPart'],
+                            $entryData['cost']['amount']['fractionalPart']
+                        )), 
+                        Currency::of($data['currency']['currencyCode'])
+                    ))
+                ;
 
             $book = $this->bookService->addEntry($entry, $book);
         }

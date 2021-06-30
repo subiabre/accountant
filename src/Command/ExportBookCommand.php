@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Repository\BookRepository;
 use App\Service\BookService;
+use App\Service\EntryService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,10 +20,11 @@ class ExportBookCommand extends AbstractBookCommand
 
     public function __construct(
         BookRepository $bookRepository,
-        BookService $bookService
+        BookService $bookService,
+        EntryService $entryService
     )
     {
-        parent::__construct($bookRepository, $bookService);
+        parent::__construct($bookRepository, $bookService, $entryService);
 
         $this->serializer = new Serializer([ new ObjectNormalizer()], [new JsonEncoder()]);
     }

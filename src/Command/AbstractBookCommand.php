@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
+use App\Service\EntryService;
 use Brick\Money\Context;
 use Brick\Money\Context\CustomContext;
 use Symfony\Component\Console\Command\Command;
@@ -22,14 +23,19 @@ abstract class AbstractBookCommand extends Command
     /** @var BookService */
     protected $bookService;
 
+    /** @var EntryService */
+    protected $entryService;
+
     public function __construct(
         BookRepository $bookRepository, 
-        BookService $bookService
+        BookService $bookService,
+        EntryService $entryService
     ){
         parent::__construct();
 
         $this->bookRepository = $bookRepository;
         $this->bookService = $bookService;
+        $this->entryService = $entryService;
     }
 
     protected function getHiddenOption(InputInterface $input, Book $book): bool

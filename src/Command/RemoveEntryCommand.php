@@ -25,7 +25,7 @@ class RemoveEntryCommand extends AbstractBookCommand
         $id = $input->getArgument('id');
 
         $book = $this->bookService->findBookByName($name);
-        $entry = $this->bookService->findEntry($id);
+        $entry = $this->entryService->findEntry($id);
 
         if (!$book || !$entry) {
             $output->writeln("The book `$name` or the entry `$entry` does not exist.");
