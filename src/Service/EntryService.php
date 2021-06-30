@@ -27,7 +27,7 @@ class EntryService
                 break;
 
             case Entry::SELL:
-                return false;
+                return true;
                 break;
             
             default:
