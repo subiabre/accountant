@@ -179,6 +179,6 @@ class BookService
             return $this->getBookMoney($book);
         }
 
-        return $this->calcTotalCost($book)->minus($this->calcTotalProfit($book), RoundingMode::UP);
+        return $this->calcTotalProfit($book)->minus($this->calcTotalCost($book), RoundingMode::UP);
     }
 }
