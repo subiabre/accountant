@@ -14,7 +14,7 @@ class BooksTable extends Table
         'Total Cost',
         'Average Cost',
         'Total Profit',
-        'total Difference'
+        'Total Difference'
     ];
 
     private $extraRows = [];
