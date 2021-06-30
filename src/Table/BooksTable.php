@@ -10,8 +10,9 @@ class BooksTable extends Table
 {
     private array $headers = [
         'Book',
-        'Amount',
-        'Cost',
+        'Amount c.',
+        'Amount t.',
+        'Cost t.',
         'Cost avg.',
         'Profit',
         'Difference'
@@ -43,6 +44,7 @@ class BooksTable extends Table
             $this->addRow(array_merge([
                 $book->getName(),
                 $book->getCurrentAmount(),
+                $book->getTotalAmount(),
                 $book->getTotalCost()->formatTo($cashFormat),
                 $book->getAverageCost()->formatTo($cashFormat),
                 $book->getTotalProfit()->formatTo($cashFormat),

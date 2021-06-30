@@ -51,7 +51,7 @@ class BookEntriesTable extends Table
             'Amount',
             'Value',
             'Book Amount',
-            'Book Cost',
+            'Book Cost t.',
             'Book Cost avg.',
             'Book Profit',
             'Book Difference'
