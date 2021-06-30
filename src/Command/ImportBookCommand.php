@@ -73,19 +73,19 @@ class ImportBookCommand extends AbstractBookCommand
         $book
             ->setName($data['name'])
             ->setCurrency(Currency::of($data['currency']['currencyCode']))
-            ->setIsHidden($data['hidden'])
+            ->setIsHidden($data['hidden'] ? $data['hidden'] : Book::DEFAULT_HIDDEN)
             ->setCashContext(new CustomContext(
                     $data['cashContext']['scale'], 
                     $data['cashContext']['step'])
                 )
-            ->setCashFormat($data['cashFormat'])
-            ->setDateFormat($data['dateFormat'])
+            ->setCashFormat($data['cashFormat'] ? $data['cashFormat'] : Book::DEFAULT_CASH_FORMAT)
+            ->setDateFormat($data['dateFormat'] ? $data['dateFormat'] : Book::DEFAULT_DATE_FORMAT)
             ;
 
         foreach ($data['entries'] as $entryData) {
             $entry = new Entry();
             $entry
-                ->setType(strval($entryData['type']))
+                ->setType(array_key_exists('type', $entryData) ? strval($entryData['type']) : Entry::DEFAULT_TYPE)
                 ->setDate(
                     DateTime::createFromFormat(
                         'U',

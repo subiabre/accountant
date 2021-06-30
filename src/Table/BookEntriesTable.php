@@ -54,7 +54,7 @@ class BookEntriesTable extends Table
             'Total Cost',
             'Average Cost',
             'Total Profit',
-            'Difference'
+            'Total Difference'
         ]);
 
         /** @var Entry */

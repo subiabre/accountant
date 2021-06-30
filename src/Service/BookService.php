@@ -76,12 +76,17 @@ class BookService
 
     public function getBookEntriesByType(Book $book, string $type): array
     {
-        return array_values(array_filter(
-            (array) $book->getEntries(), 
-            function ($entry) use ($type) {
-                if ($entry->getType() == $type) return $entry;
+        /** @var Entry[] */
+        $entries = $book->getEntries();
+        $result = [];
+
+        foreach ($entries as $entry) {
+            if ($entry->getType() === $type) {
+                $result[] = $entry;
             }
-        ));
+        }
+
+        return $result;
     }
 
     public function getBookMoney(Book $book): Money
@@ -160,7 +165,7 @@ class BookService
         if ($totalAmount == (float) 0) {
             return $this->getBookMoney($book);
         }
-        
+
         return $this->calcTotalCost($book)->minus($this->calcTotalProfit($book), RoundingMode::UP);
     }
 }

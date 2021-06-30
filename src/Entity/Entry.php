@@ -11,10 +11,12 @@ use Symfony\Component\Serializer\Annotation as Serializer;
  */
 class Entry
 {
+    public const MESSAGE_INVALID_TYPE = 'Valid entry types are `buy` or `sell`, %s is not a valid type';
+
     public const BUY = 'buy';
     public const SELL = 'sell';
 
-    public const MESSAGE_INVALID_TYPE = 'Valid entry types are: %s, %s is not a valid type';
+    public const DEFAULT_TYPE = 'buy';
 
     /**
      * @ORM\Id
