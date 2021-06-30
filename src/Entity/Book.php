@@ -68,6 +68,12 @@ class Book
     private $totalAmount;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Serializer\Groups({"default"})
+     */
+    private $currentAmount;
+
+    /**
      * @ORM\Column(type="object", nullable=true)
      * @Serializer\Groups({"default"})
      */
@@ -177,6 +183,18 @@ class Book
     public function setTotalAmount(?float $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
+
+        return $this;
+    }
+
+    public function getCurrentAmount(): ?float
+    {
+        return $this->currentAmount;
+    }
+
+    public function setCurrentAmount(?float $currentAmount): self
+    {
+        $this->currentAmount = $currentAmount;
 
         return $this;
     }

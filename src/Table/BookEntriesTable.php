@@ -45,16 +45,16 @@ class BookEntriesTable extends Table
         
         $this->setHeaders([
             'Book',
-            'Entry #',
+            '#',
             'Date',
             'Type',
             'Amount',
-            'Cost',
-            'Total Amount',
-            'Total Cost',
-            'Average Cost',
-            'Total Profit',
-            'Total Difference'
+            'Value',
+            'Book Amount',
+            'Book Cost',
+            'Book Cost avg.',
+            'Book Profit',
+            'Book Difference'
         ]);
 
         /** @var Entry */
@@ -68,7 +68,7 @@ class BookEntriesTable extends Table
                 $entry->getType(),
                 $entry->getAmount(),
                 $entry->getValue()->formatTo($cashFormat),
-                $tableBook->getTotalAmount(),
+                $tableBook->getCurrentAmount(),
                 $tableBook->getTotalCost()->formatTo($cashFormat),
                 $tableBook->getAverageCost()->formatTo($cashFormat),
                 $tableBook->getTotalProfit()->formatTo($cashFormat),

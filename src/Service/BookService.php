@@ -67,6 +67,7 @@ class BookService
     {
         return $book
             ->setTotalAmount($this->calcTotalAmount($book))
+            ->setCurrentAmount($this->calcCurrentAmount($book))
             ->setTotalCost($this->calcTotalCost($book))
             ->setAverageCost($this->calcAverageCost($book))
             ->setTotalProfit($this->calcTotalProfit($book))
@@ -95,6 +96,18 @@ class BookService
     }
 
     public function calcTotalAmount(Book $book): float
+    {
+        $entries = $this->getBookEntriesByType($book, Entry::BUY);
+        $total = 0;
+
+        foreach ($entries as $entry) {
+            $total += $entry->getAmount();
+        }
+
+        return $total;
+    }
+
+    public function calcCurrentAmount(Book $book): float
     {
         /** @var Entry[] */
         $entries = $book->getEntries();
