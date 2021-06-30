@@ -96,8 +96,8 @@ class ImportBookCommand extends AbstractBookCommand
                 ->setValue(
                     Money::of(
                         floatval(sprintf('%d.%d', 
-                            $entryData['cost']['amount']['integralPart'],
-                            $entryData['cost']['amount']['fractionalPart']
+                            $entryData['value']['amount']['integralPart'],
+                            $entryData['value']['amount']['fractionalPart']
                         )), 
                         Currency::of($data['currency']['currencyCode'])
                     ))
