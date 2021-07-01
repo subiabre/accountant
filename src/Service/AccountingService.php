@@ -6,21 +6,21 @@ use App\Component\Accounting\AbstractAccounting;
 
 class AccountingService
 {
-    private $accountingMethods;
+    private array $accountings;
 
     public function __construct(
-        iterable $accountingMethods
+        iterable $accountings
     ) {
-        $this->accountingMethods = $accountingMethods;
+        $this->accountings = iterator_to_array($accountings);
     }
 
-    public function getAccountings(): iterable
+    public function getAccountings(): array
     {
-        return $this->accountingMethods;
+        return $this->accountings;
     }
 
-    public function getAccountingByName(string $accountingClassName): ?AbstractAccounting
+    public function getAccountingByName(string $name): ?AbstractAccounting
     {
-        var_dump($this->accountingMethods);
+        return $this->accountings[$name];
     }
 }

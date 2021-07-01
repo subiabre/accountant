@@ -8,6 +8,8 @@ use Brick\Money\Money;
 
 interface AccountingInterface
 {
+    public static function getDefaultIndexName(): string;
+
     public function getSellAmount(Book $book): Amount;
 
     public function getSellValue(Book $book): Money;

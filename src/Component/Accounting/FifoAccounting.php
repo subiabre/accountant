@@ -9,6 +9,11 @@ use Brick\Money\Money;
 
 class FifoAccounting extends AbstractAccounting
 {
+    public static function getDefaultIndexName(): string
+    {
+        return 'fifo';
+    }
+
     private function getSellsForAmount(Book $book, Amount $amount): EntryCollection
     {
         $allBuys = $book->getEntries()->getBuys();

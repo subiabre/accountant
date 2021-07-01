@@ -26,8 +26,7 @@ services:
             - '../src/Tests/'
 
     App\Service\AccountingService:
-        arguments:
-            - !tagged_iterator app.accounting
+        arguments: [!tagged { tag: 'app.accounting', index_by: 'key'}]
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class

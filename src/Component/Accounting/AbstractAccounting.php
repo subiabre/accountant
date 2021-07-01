@@ -27,7 +27,7 @@ abstract class AbstractAccounting implements AccountingInterface
     {
         $amount = new Amount();
 
-        foreach ($$book->getEntries()->getSells() as $sell) {
+        foreach ($book->getEntries()->getSells() as $sell) {
             $amount->plus($sell->getAmount()->getTotal());
         }
 
