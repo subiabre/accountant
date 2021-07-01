@@ -14,6 +14,11 @@ class AccountingService
         $this->accountingMethods = $accountingMethods;
     }
 
+    public function getAccountings(): iterable
+    {
+        return $this->accountingMethods;
+    }
+
     public function getAccountingByName(string $accountingClassName): ?AbstractAccounting
     {
         var_dump($this->accountingMethods);

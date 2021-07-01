@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Component\Accounting\AccountingFactory;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;

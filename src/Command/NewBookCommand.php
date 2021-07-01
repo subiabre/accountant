@@ -21,7 +21,7 @@ class NewBookCommand extends AbstractBookCommand
             'accounting',
             InputArgument::OPTIONAL,
             self::MESSAGE_ARGUMENT_ACCOUNTING,
-            Book::DEFAULT_ACCOUNTING_NAME
+            Book::DEFAULT_ACCOUNTING
         );
         $this->addArgument(
             'currency', 
