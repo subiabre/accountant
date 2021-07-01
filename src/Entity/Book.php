@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
+use App\Component\Accounting\AbstractAccounting;
+use App\Component\Collection\EntryCollection;
 use Brick\Money\Context;
 use Brick\Money\Currency;
-use Brick\Money\Money;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -31,6 +30,7 @@ class Book
     public const DEFAULT_CASH_FORMAT = 'en_US';
     public const DEFAULT_CASH_CURRENCY = 'USD';
     public const DEFAULT_DATE_FORMAT = 'Y-m-d';
+    public const DEFAULT_ACCOUNTING = 'FifoAccounting';
 
     /**
      * @ORM\Id
@@ -62,40 +62,10 @@ class Book
     private $entries;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="object")
      * @Serializer\Groups({"default"})
      */
-    private $totalAmount;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     * @Serializer\Groups({"default"})
-     */
-    private $currentAmount;
-
-    /**
-     * @ORM\Column(type="object", nullable=true)
-     * @Serializer\Groups({"default"})
-     */
-    private $totalCost;
-
-    /**
-     * @ORM\Column(type="object", nullable=true)
-     * @Serializer\Groups({"default"})
-     */
-    private $averageCost;
-
-    /**
-     * @ORM\Column(type="object", nullable=true)
-     * @Serializer\Groups({"default"})
-     */
-    private $totalProfit;
-
-    /**
-     * @ORM\Column(type="object", nullable=true)
-     * @Serializer\Groups({"default"})
-     */
-    private $totalDifference;
+    private $accounting;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -119,7 +89,9 @@ class Book
 
     public function __construct()
     {
-        $this->entries = new ArrayCollection();
+        $this->entries = new EntryCollection();
+
+        $this->entries->get;
     }
 
     public function getId(): ?int
@@ -152,9 +124,9 @@ class Book
     } 
 
     /**
-     * @return Collection|Entry[]
+     * @return EntryCollection
      */
-    public function getEntries(): Collection
+    public function getEntries(): EntryCollection
     {
         return $this->entries;
     }
@@ -175,74 +147,14 @@ class Book
         return $this;
     }
 
-    public function getTotalAmount(): ?float
+    public function getAccounting(): AbstractAccounting
     {
-        return $this->totalAmount;
+        return $this->accounting;
     }
 
-    public function setTotalAmount(?float $totalAmount): self
+    public function setAccounting(AbstractAccounting $accounting): self
     {
-        $this->totalAmount = $totalAmount;
-
-        return $this;
-    }
-
-    public function getCurrentAmount(): ?float
-    {
-        return $this->currentAmount;
-    }
-
-    public function setCurrentAmount(?float $currentAmount): self
-    {
-        $this->currentAmount = $currentAmount;
-
-        return $this;
-    }
-
-    public function getTotalCost(): ?Money
-    {
-        return $this->totalCost;
-    }
-
-    public function setTotalCost(?Money $totalCost): self
-    {
-        $this->totalCost = $totalCost;
-
-        return $this;
-    }
-
-    public function getAverageCost(): ?Money
-    {
-        return $this->averageCost;
-    }
-
-    public function setAverageCost(?Money $averageCost): self
-    {
-        $this->averageCost = $averageCost;
-
-        return $this;
-    }
-
-    public function getTotalProfit(): ?Money
-    {
-        return $this->totalProfit;
-    }
-
-    public function setTotalProfit(?Money $totalProfit): self
-    {
-        $this->totalProfit = $totalProfit;
-
-        return $this;
-    }
-
-    public function getTotalDifference(): ?Money
-    {
-        return $this->totalDifference;
-    }
-
-    public function setTotalDifference(?Money $totalDifference): self
-    {
-        $this->totalDifference = $totalDifference;
+        $this->accounting = $accounting;
 
         return $this;
     }

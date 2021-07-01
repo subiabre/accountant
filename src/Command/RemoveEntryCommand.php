@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Table\BookEntriesTable;
+use App\Component\Table\BookEntriesTable;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -2,9 +2,10 @@
 
 namespace App\Command;
 
+use App\Component\Amount;
+use App\Component\Table\BookEntriesTable;
 use App\Entity\Book;
 use App\Entity\Entry;
-use App\Table\BookEntriesTable;
 use Brick\Money\Money;
 use DateTime;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,7 +43,7 @@ class NewEntryCommand extends AbstractBookCommand
             return self::FAILURE;
         }
 
-        $amount = floatval($input->getArgument('amount'));
+        $amount = new Amount(floatval($input->getArgument('amount')));
         $cost = Money::of($input->getArgument('cost'), $book->getCurrency());
 
         $entry = new Entry();

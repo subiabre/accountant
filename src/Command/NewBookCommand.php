@@ -18,9 +18,15 @@ class NewBookCommand extends AbstractBookCommand
 
         $this->addArgument('name', InputArgument::REQUIRED, 'Name for this book, must be unique');
         $this->addArgument(
+            'accounting',
+            InputArgument::OPTIONAL,
+            self::MESSAGE_ARGUMENT_ACCOUNTING,
+            Book::DEFAULT_ACCOUNTING_NAME
+        );
+        $this->addArgument(
             'currency', 
             InputArgument::OPTIONAL, 
-            'Default currency code for entries in this book', 
+            self::MESSAGE_ARGUMENT_CURRENCY, 
             Book::DEFAULT_CASH_CURRENCY
         );
         
@@ -33,6 +39,7 @@ class NewBookCommand extends AbstractBookCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
+        $accounting = $this->accountingFactory->get($input->getArgument('accounting'));
         $currency = Currency::of($input->getArgument('currency'));
 
         $book = $this->bookService->findBookByName($name);
@@ -46,6 +53,7 @@ class NewBookCommand extends AbstractBookCommand
         $book
             ->setName($name)
             ->setCurrency($currency)
+            ->setAccounting($accounting)
             ->setIsHidden($this->getHiddenOption($input, $book))
             ->setCashContext($this->getCashContextOption($input, $book))
             ->setCashFormat($this->getCashFormatOption($input, $book))

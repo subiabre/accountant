@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Component\Amount;
 use App\Entity\Book;
 use App\Entity\Entry;
 use Brick\Money\Context\CustomContext;
@@ -73,6 +74,7 @@ class ImportBookCommand extends AbstractBookCommand
         $book
             ->setName($data['name'])
             ->setCurrency(Currency::of($data['currency']['currencyCode']))
+            ->setAccounting($this->accountingFactory->get($data['accounting']['name']))
             ->setIsHidden($data['hidden'] ? $data['hidden'] : Book::DEFAULT_HIDDEN)
             ->setCashContext(new CustomContext(
                     $data['cashContext']['scale'], 
@@ -92,7 +94,7 @@ class ImportBookCommand extends AbstractBookCommand
                         $entryData['date']['timestamp'],
                         new DateTimeZone($entryData['date']['timezone']['name'])
                     ))
-                ->setAmount(floatval($entryData['amount']))
+                ->setAmount(new Amount(floatval($entryData['amount'])))
                 ->setValue(
                     Money::of(
                         floatval(sprintf('%d.%d', 

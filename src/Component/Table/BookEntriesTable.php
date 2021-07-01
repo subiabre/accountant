@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Table;
+namespace App\Component\Table;
 
 use App\Entity\Book;
 use App\Entity\Entry;

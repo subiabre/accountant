@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Component\Accounting\AccountingFactory;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
@@ -17,6 +18,9 @@ use Symfony\Component\Console\Input\InputOption;
  */
 abstract class AbstractBookCommand extends Command
 {
+    public const MESSAGE_ARGUMENT_ACCOUNTING = 'Accounting method used for this book';
+    public const MESSAGE_ARGUMENT_CURRENCY = 'Default currency code for entries in this book';
+
     /** @var BookRepository */
     protected $bookRepository;
 

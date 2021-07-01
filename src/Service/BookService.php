@@ -25,7 +25,7 @@ class BookService
 
     public function saveNewBook(Book $book)
     {
-        $this->saveBook($this->setBookData($book));
+        $this->saveBook($book);
     }
 
     public function findBook(int $bookId): ?Book
@@ -42,14 +42,14 @@ class BookService
     {
         $book->addEntry($entry);
 
-        return $this->setBookData($book);
+        return $book;
     }
 
     public function removeEntry(Entry $entry, Book $book): Book
     {
         $book->removeEntry($entry);
 
-        return $this->setBookData($book);
+        return $book;
     }
 
     public function deleteBook(Book $book)
@@ -63,122 +63,8 @@ class BookService
         $this->em->flush();
     }
 
-    public function setBookData(Book $book): Book
-    {
-        return $book
-            ->setTotalAmount($this->calcTotalAmount($book))
-            ->setCurrentAmount($this->calcCurrentAmount($book))
-            ->setTotalCost($this->calcTotalCost($book))
-            ->setAverageCost($this->calcAverageCost($book))
-            ->setTotalProfit($this->calcTotalProfit($book))
-            ->setTotalDifference($this->calcTotalDifference($book))
-            ;
-    }
-
-    public function getBookEntriesByType(Book $book, string $type): array
-    {
-        /** @var Entry[] */
-        $entries = $book->getEntries();
-        $result = [];
-
-        foreach ($entries as $entry) {
-            if ($entry->getType() === $type) {
-                $result[] = $entry;
-            }
-        }
-
-        return $result;
-    }
-
     public function getBookMoney(Book $book): Money
     {
         return Money::of(0, $book->getCurrency(), $book->getCashContext());
-    }
-
-    public function calcTotalAmount(Book $book): float
-    {
-        $entries = $this->getBookEntriesByType($book, Entry::BUY);
-        $total = 0;
-
-        foreach ($entries as $entry) {
-            $total += $entry->getAmount();
-        }
-
-        return $total;
-    }
-
-    public function calcCurrentAmount(Book $book): float
-    {
-        /** @var Entry[] */
-        $entries = $book->getEntries();
-        $total = 0;
-
-        foreach ($entries as $entry) {
-            switch ($entry->getType()) {
-                case Entry::SELL:
-                    $total -= $entry->getAmount();
-                    break;
-                
-                case Entry::BUY:
-                    $total += $entry->getAmount();
-                    break;
-            }
-        }
-
-        return $total;
-    }
-
-    public function calcTotalCost(Book $book): Money
-    {
-        $entries = $this->getBookEntriesByType($book, Entry::BUY);
-        $money = $this->getBookMoney($book);
-
-        if (count($entries) < 1) {
-            return $money;
-        }
-
-        foreach ($entries as $entry) {
-            $money = $money->plus($entry->getValue()->toRational(), RoundingMode::UP);
-        }
-
-        return $money;
-    }
-
-    public function calcAverageCost(Book $book): Money
-    {
-        $totalAmount = $this->calcTotalAmount($book);
-
-        if ($totalAmount == (float) 0) {
-            return $this->getBookMoney($book);
-        }
-
-        return $this->calcTotalCost($book)->dividedBy($totalAmount, RoundingMode::UP);
-    }
-
-    public function calcTotalProfit(Book $book): Money
-    {
-        $entries = $this->getBookEntriesByType($book, Entry::SELL);
-        $money = $this->getBookMoney($book);
-
-        if (count($entries) < 1) {
-            return $money;
-        }
-
-        foreach ($entries as $entry) {
-            $money = $money->plus($entry->getValue()->toRational(), RoundingMode::UP);
-        }
-
-        return $money;
-    }
-
-    public function calcTotalDifference(Book $book): Money
-    {
-        $totalAmount = $this->calcTotalAmount($book);
-
-        if ($totalAmount == (float) 0) {
-            return $this->getBookMoney($book);
-        }
-
-        return $this->calcTotalProfit($book)->minus($this->calcTotalCost($book), RoundingMode::UP);
     }
 }

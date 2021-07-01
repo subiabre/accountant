@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Component\Amount;
 use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -33,7 +34,7 @@ class Entry
     private $type;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="object")
      * @Serializer\Groups({"default"})
      */
     private $amount;
@@ -67,12 +68,12 @@ class Entry
         return $this;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): Amount
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(Amount $amount): self
     {
         $this->amount = $amount;
 

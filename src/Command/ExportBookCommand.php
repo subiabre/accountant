@@ -2,33 +2,15 @@
 
 namespace App\Command;
 
-use App\Repository\BookRepository;
-use App\Service\BookService;
-use App\Service\EntryService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ExportBookCommand extends AbstractBookCommand
 {
-    /** @var SerializerInterface */
-    private $serializer;
-
-    public function __construct(
-        BookRepository $bookRepository,
-        BookService $bookService,
-        EntryService $entryService
-    )
-    {
-        parent::__construct($bookRepository, $bookService, $entryService);
-
-        $this->serializer = new Serializer([ new ObjectNormalizer()], [new JsonEncoder()]);
-    }
-
     protected function configure()
     {
         $this->setName('account:export');
@@ -47,7 +29,8 @@ class ExportBookCommand extends AbstractBookCommand
         /** @var Book[] */
         $books = empty($names) ? $this->bookRepository->findAll() : $this->bookRepository->findBy(['name' => $names]);
 
-        file_put_contents($filename, $this->serializer->serialize($books, 'json', ['groups' => 'default']));
+        $serializer = new Serializer([ new ObjectNormalizer()], [new JsonEncoder()]);
+        file_put_contents($filename, $serializer->serialize($books, 'json', ['groups' => 'default']));
 
         return self::SUCCESS;
     }
