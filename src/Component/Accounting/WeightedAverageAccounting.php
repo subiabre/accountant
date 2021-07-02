@@ -7,15 +7,18 @@ use Brick\Money\Money;
 
 class WeightedAverageAccounting extends AbstractAccounting
 {
-    public static function getDefaultIndexName(): string
+    public static function getKey(): string
     {
         return 'wa';
     }
 
-    public function getSellCost(Book $book): Money
+    public static function getDescription(): string
     {
-        $averageCost = $this->getBuyValue($book)->dividedBy($this->getBuyAmount($book));
+        return 'Weighted Average';
+    }
 
-        return $averageCost->multipliedBy($this->getSellAmount($book));
+    public function getBuyValueOfSells(Book $book): Money
+    {
+        return $this->getBuyValueAverage($book)->multipliedBy($this->getSellAmount($book));
     }
 }

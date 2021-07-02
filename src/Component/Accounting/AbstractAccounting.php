@@ -23,12 +23,27 @@ abstract class AbstractAccounting implements AccountingInterface
         $this->entryService = $entryService;
     }
 
+    final public static function getDefaultIndexName(): string
+    {
+        return self::getKey();
+    }
+
+    public function getDifferenceAmount(Book $book): Amount
+    {
+        return $this->getBuyAmount($book)->minus($this->getSellAmount($book));
+    }
+
+    public function getDifferenceValue(Book $book): Money
+    {
+        return $this->getSellValue($book)->minus($this->getBuyValueOfSells($book));
+    }
+
     public function getSellAmount(Book $book): Amount
     {
         $amount = new Amount();
 
         foreach ($book->getEntries()->getSells() as $sell) {
-            $amount->plus($sell->getAmount()->getTotal());
+            $amount->plus($sell->getAmount());
         }
 
         return $amount;
@@ -50,7 +65,7 @@ abstract class AbstractAccounting implements AccountingInterface
         $amount = new Amount();
 
         foreach ($book->getEntries()->getBuys() as $buy) {
-            $amount->plus($buy->getAmount()->getTotal());
+            $amount->plus($buy->getAmount());
         }
 
         return $amount;
@@ -67,8 +82,8 @@ abstract class AbstractAccounting implements AccountingInterface
         return $money;
     }
 
-    public function getEntryAverageValue(Entry $entry): Money
+    public function getBuyValueAverage(Book $book): Money
     {
-        return $entry->getValue()->dividedBy($entry->getAmount()->getTotal());
+        return $this->getBuyValue($book)->dividedBy($this->getBuyAmount($book));
     }
 }

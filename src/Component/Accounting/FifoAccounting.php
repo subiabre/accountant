@@ -9,28 +9,31 @@ use Brick\Money\Money;
 
 class FifoAccounting extends AbstractAccounting
 {
-    public static function getDefaultIndexName(): string
+    public static function getKey(): string
     {
         return 'fifo';
     }
 
-    private function getSellsForAmount(Book $book, Amount $amount): EntryCollection
+    public static function getDescription(): string
+    {
+        return 'First In, First Out';
+    }
+
+    private function getBuysForAmount(Book $book, Amount $sellAmount): EntryCollection
     {
         $allBuys = $book->getEntries()->getBuys();
         $soldBuys = new EntryCollection();
 
         $i = 0;
-        while ($amount->getAvailable() > 0) {
+        while ($sellAmount->getAvailable() > 0) {
             $buy = $allBuys[$i];
 
-            if ($buy->getAmount()->getAvailable() > $amount->getAvailable()) {
-                $buy->setValue(
-                        $this->getEntryAverageValue($buy)->multipliedBy($amount->getAvailable())
-                );
-                $buy->setAmount(($amount));
+            if ($buy->getAmount()->getAvailable() > $sellAmount->getAvailable()) {
+                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount->getAvailable()));
+                $buy->setAmount($sellAmount);
             }
 
-            $amount->minus($buy->getAmount()->getAvailable());
+            $sellAmount->minus($buy->getAmount());
             $soldBuys->add($buy);
 
             $i++;
@@ -39,9 +42,9 @@ class FifoAccounting extends AbstractAccounting
         return $soldBuys;
     }
 
-    public function getSellCost(Book $book): Money
+    public function getBuyValueOfSells(Book $book): Money
     {
-        $soldBuys = $this->getSellsForAmount($book, $this->getSellAmount($book));
+        $soldBuys = $this->getBuysForAmount($book, $this->getSellAmount($book));
 
         $cost = Money::of(0, $book->getCurrency(), $book->getCashContext());
         foreach ($soldBuys->getSells() as $soldBuy) {
