@@ -28,6 +28,12 @@ class Entry
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Book", inversedBy="entries")
+     * @Serializer\Groups({"default"})
+     */
+    private $book;
+
+    /**
      * @ORM\Column(type="string")
      * @Serializer\Groups({"default"})
      */
@@ -54,6 +60,18 @@ class Entry
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getBook(): Book
+    {
+        return $this->book;
+    }
+
+    public function setBook(Book $book): self
+    {
+        $this->book = $book;
+        
+        return $this;
     }
 
     public function getType(): string
@@ -90,6 +108,11 @@ class Entry
         $this->value = $value;
 
         return $this;
+    }
+
+    public function getValueAverage(): Money
+    {
+        return $this->value->dividedBy($this->amount);
     }
 
     public function getDate(): ?\DateTimeInterface

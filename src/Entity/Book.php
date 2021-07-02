@@ -30,7 +30,7 @@ class Book
     public const DEFAULT_CASH_FORMAT = 'en_US';
     public const DEFAULT_CASH_CURRENCY = 'USD';
     public const DEFAULT_DATE_FORMAT = 'Y-m-d';
-    public const DEFAULT_ACCOUNTING = 'FifoAccounting';
+    public const DEFAULT_ACCOUNTING_KEY = 'wa';
 
     /**
      * @ORM\Id
@@ -52,11 +52,7 @@ class Book
     private $currency;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Entry", cascade={"persist"})
-     * @ORM\JoinTable(name="book_entries",
-     *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\OneToMany(targetEntity="Entry", mappedBy="book")
      * @Serializer\Groups({"default"})
      */
     private $entries;
