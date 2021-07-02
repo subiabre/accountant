@@ -21,7 +21,7 @@ class NewBookCommand extends AbstractBookCommand
             'accounting',
             InputArgument::OPTIONAL,
             self::MESSAGE_ARGUMENT_ACCOUNTING,
-            Book::DEFAULT_ACCOUNTING
+            Book::DEFAULT_ACCOUNTING_KEY
         );
         $this->addArgument(
             'currency', 
@@ -39,7 +39,7 @@ class NewBookCommand extends AbstractBookCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $accounting = $this->accountingFactory->get($input->getArgument('accounting'));
+        $accounting = $this->accountingService->getAccountingByKey($input->getArgument('accounting'));
         $currency = Currency::of($input->getArgument('currency'));
 
         $book = $this->bookService->findBookByName($name);

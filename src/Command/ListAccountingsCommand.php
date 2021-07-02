@@ -14,6 +14,7 @@ class ListAccountingsCommand extends Command
 
     public function __construct(AccountingService $accountingService)
     {
+        parent::__construct();
         $this->accountingService = $accountingService;
     }
 
@@ -26,6 +27,15 @@ class ListAccountingsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        var_dump($this->accountingService->getAccountings());
+        $table = new Table($output);
+        $table->setHeaders(['Key', 'Description']);
+
+        foreach ($this->accountingService->getAccountings() as $accounting) {
+            $table->addRow([$accounting::getKey(), $accounting::getDescription()]);
+        }
+
+        $table->render();
+
+        return self::SUCCESS;
     }
 }

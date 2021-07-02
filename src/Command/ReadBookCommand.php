@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Component\Table\BookEntriesTable;
+use App\Component\Table\EntriesTable;
 use App\Component\Table\BooksTable;
 use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,9 +37,9 @@ class ReadBookCommand extends AbstractBookCommand
                 ['name' => $this->getSortOption($input)]
             );
 
-            $table = new BooksTable($output);
-            $table
-                ->setBooks($books)
+            $booksTable = new BooksTable($output);
+            $booksTable
+                ->addItems($books)
                 ->render();
 
             return self::SUCCESS;

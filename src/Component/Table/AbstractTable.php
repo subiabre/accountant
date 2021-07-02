@@ -21,6 +21,10 @@ abstract class AbstractTable
 
     abstract public function configure(): void;
 
+    /**
+     * @param string $header Column header title
+     * @param string $method Method of this table to be run on each row at this column
+     */
     final public function setColumn(string $header, string $method): self
     {
         $this->columns[$header] = $method;

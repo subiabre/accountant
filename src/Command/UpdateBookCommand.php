@@ -37,7 +37,7 @@ class UpdateBookCommand extends AbstractBookCommand
         }
 
         $accounting = $input->getArgument('accounting')
-            ? $this->getAccounting($input->getArgument('accounting'))
+            ? $this->accountingService->getAccountingByKey($input->getArgument('accounting'))
             : $book->getAccounting()
             ;
 

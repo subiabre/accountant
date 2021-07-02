@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Book;
 use App\Repository\BookRepository;
+use App\Service\AccountingService;
 use App\Service\BookService;
 use App\Service\EntryService;
 use Brick\Money\Context;
@@ -17,8 +18,8 @@ use Symfony\Component\Console\Input\InputOption;
  */
 abstract class AbstractBookCommand extends Command
 {
-    public const MESSAGE_ARGUMENT_ACCOUNTING = 'Accounting method used for this book';
-    public const MESSAGE_ARGUMENT_CURRENCY = 'Default currency code for entries in this book';
+    public const MESSAGE_ARGUMENT_ACCOUNTING = 'Accounting key for the method in this book';
+    public const MESSAGE_ARGUMENT_CURRENCY = 'Currency code for the currency used in entries in this book';
 
     /** @var BookRepository */
     protected $bookRepository;
@@ -29,16 +30,21 @@ abstract class AbstractBookCommand extends Command
     /** @var EntryService */
     protected $entryService;
 
+    /** @var AccountingService */
+    protected $accountingService;
+
     public function __construct(
         BookRepository $bookRepository, 
         BookService $bookService,
-        EntryService $entryService
+        EntryService $entryService,
+        AccountingService $accountingService
     ){
         parent::__construct();
 
         $this->bookRepository = $bookRepository;
         $this->bookService = $bookService;
         $this->entryService = $entryService;
+        $this->accountingService = $accountingService;
     }
 
     protected function getHiddenOption(InputInterface $input, Book $book): bool

@@ -32,11 +32,9 @@ class DescribeBookCommand extends AbstractBookCommand
 
         $table = new BooksTable($output);
         $table
-            ->setExtraColumns(
-                ['Currency', 'Cash Format'],
-                [$book->getCurrency()->getCurrencyCode(), $book->getCashFormat()]
-            )
-            ->setBooks([$book])
+            ->setColumn('Currency', 'getCurrency')
+            ->setColumn('Format', 'getCashFormat')
+            ->addItem($book)
             ->render();
 
         return self::SUCCESS;
