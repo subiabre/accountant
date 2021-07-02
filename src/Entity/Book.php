@@ -86,8 +86,6 @@ class Book
     public function __construct()
     {
         $this->entries = new EntryCollection();
-
-        $this->entries->get;
     }
 
     public function getId(): ?int

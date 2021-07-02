@@ -39,30 +39,38 @@ class NewBookCommand extends AbstractBookCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $accounting = $this->accountingService->getAccountingByKey($input->getArgument('accounting'));
         $currency = Currency::of($input->getArgument('currency'));
-
-        $book = $this->bookService->findBookByName($name);
-
-        if ($book) {
-            $output->writeln(sprintf(Book::MESSAGE_ALREADY, $name));
-            return self::FAILURE;
-        }
-
-        $book = new Book();
-        $book
-            ->setName($name)
-            ->setCurrency($currency)
-            ->setAccounting($accounting)
-            ->setIsHidden($this->getHiddenOption($input, $book))
-            ->setCashContext($this->getCashContextOption($input, $book))
-            ->setCashFormat($this->getCashFormatOption($input, $book))
-            ->setDateFormat($this->getDateFormatOption($input, $book))
+        $accounting = $this->accountingService->getAccountingByKey($input->getArgument('accounting'))
+            ? $this->accountingService->getAccountingByKey($input->getArgument('accounting'))
+            : $this->accountingService->getAccountingByKey(Book::DEFAULT_ACCOUNTING_KEY)
             ;
 
-        $this->bookService->saveNewBook($book);
+        try {
+            $book = $this->bookService->findBookByName($name);
 
-        $output->writeln(sprintf(Book::MESSAGE_CREATED, $name));
+            if ($book) {
+                $output->writeln(sprintf(Book::MESSAGE_ALREADY, $name));
+                return self::FAILURE;
+            }
+
+            $book = new Book();
+            $book
+                ->setName($name)
+                ->setCurrency($currency)
+                ->setAccounting($accounting)
+                ->setIsHidden($this->getHiddenOption($input, $book))
+                ->setCashContext($this->getCashContextOption($input, $book))
+                ->setCashFormat($this->getCashFormatOption($input, $book))
+                ->setDateFormat($this->getDateFormatOption($input, $book))
+                ;
+
+            $this->bookService->saveNewBook($book);
+
+            $output->writeln(sprintf(Book::MESSAGE_CREATED, $name));
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            $output->writeln($e->getTraceAsString());
+        }
 
         return self::SUCCESS;
     }

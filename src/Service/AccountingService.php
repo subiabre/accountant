@@ -29,6 +29,8 @@ class AccountingService
      */
     public function getAccountingByKey(string $name): ?AbstractAccounting
     {
-        return $this->accountings[$name];
+        foreach ($this->accountings as $accounting) {
+            return $accounting::getKey() === $name ? $accounting : null;
+        }
     }
 }
