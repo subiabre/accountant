@@ -2,56 +2,60 @@
 
 namespace App\Component\Table;
 
-use App\Entity\Book;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\OutputInterface;
+use App\Component\Accounting\AccountingInterface;
 
-class BooksTable extends Table
+class BooksTable extends AbstractTable
 {
-    private array $headers = [
-        'Book',
-        'Amount c.',
-        'Amount t.',
-        'Cost t.',
-        'Cost avg.',
-        'Profit',
-        'Difference'
-    ];
+    /** @var AccountingInterface */
+    private $accounting;
 
-    private $extraRows = [];
-
-    public function __construct(OutputInterface $outputInterface)
+    public function configure(): void
     {
-        parent::__construct($outputInterface);
-
-        $this->setHeaders($this->headers);
+        $this->setColumn('Amount', 'getAmount');
+        $this->setColumn('Avg. Price', 'getAveragePrice');
+        $this->setColumn('Revenue', 'getRevenue');
+        $this->setColumn('Earnings', 'getEarnings');
     }
 
-    public function setExtraColumns(array $headers, array $rows)
+    public function rowSetup($row): void
     {
-        $this->setHeaders(array_merge($this->headers, $headers));
-        $this->extraRows = $rows;
+        $this->accounting = $row->getAccounting();
 
-        return $this;
+        parent::rowSetup($row);
     }
 
-    public function setBooks(array $books): self
+    public function getAmount()
     {
-        /** @var Book */
-        foreach ($books as $book) {
-            $cashFormat = $book->getCashFormat();
+        $this->accounting->getDifferenceAmount($this->row);
+    }
 
-            $this->addRow(array_merge([
-                $book->getName(),
-                $book->getCurrentAmount(),
-                $book->getTotalAmount(),
-                $book->getTotalCost()->formatTo($cashFormat),
-                $book->getAverageCost()->formatTo($cashFormat),
-                $book->getTotalProfit()->formatTo($cashFormat),
-                $book->getTotalDifference()->formatTo($cashFormat)
-            ], $this->extraRows));
-        }
+    public function getAveragePrice()
+    {
+        $this->accounting->getBuyValueAverage($this->row);
+    }
 
-        return $this;
+    public function getRevenue()
+    {
+        $this->accounting->getSellValue($this->row);
+    }
+
+    public function getEarnings()
+    {
+        $this->accounting->getBuyValueOfSells($this->row);
+    }
+
+    public function getCurrency()
+    {
+        $this->row->getCurrency()->getCurrencyCode();
+    }
+
+    public function getCashFormat()
+    {
+        $this->row->getCashFormat();
+    }
+
+    public function getCashContext()
+    {
+        $this->row->getCashContext();
     }
 }
