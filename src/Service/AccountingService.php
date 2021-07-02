@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Component\Accounting\AbstractAccounting;
+use App\Component\Accounting\AccountingInterface;
 
 class AccountingService
 {
@@ -14,12 +15,19 @@ class AccountingService
         $this->accountings = iterator_to_array($accountings);
     }
 
+    /**
+     * @return AccountingInterface[]
+     */
     public function getAccountings(): array
     {
         return $this->accountings;
     }
 
-    public function getAccountingByName(string $name): ?AbstractAccounting
+    /**
+     * @param string $name
+     * @return AbstractAccounting
+     */
+    public function getAccountingByKey(string $name): ?AbstractAccounting
     {
         return $this->accountings[$name];
     }
