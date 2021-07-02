@@ -65,11 +65,13 @@ class Amount
 
     /**
      * Add to this amount
-     * @param float $amount
+     * @param Amount|float $amount
      * @return self
      */
-    public function plus(float $amount): self
+    public function plus($amount): self
     {
+        $amount = $amount instanceof Amount ? $amount->getAvailable() : (float) $amount;
+
         $this->setTotal($this->total + $amount);
         $this->setAvailable($this->available + $amount);
 
@@ -78,14 +80,16 @@ class Amount
 
     /**
      * Spend from this amount
-     * @param float $amount
+     * @param Amount|float $amount
      * @return self
      */
-    public function minus(float $amount): self
+    public function minus($amount): self
     {
+        $amount = $amount instanceof Amount ? $amount->getAvailable() : (float) $amount;
         $available = $this->available - $amount;
+
         $this->setAvailable($available < 0 ? 0 : $available);   
-        $this->setDeficit($available < 0 ? $available : 0);     
+        $this->setDeficit($available < 0 ? abs($available) : 0);     
 
         return $this;
     }
