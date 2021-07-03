@@ -63,7 +63,7 @@ class BookService
         $this->em->flush();
     }
 
-    public function getBookMoney(Book $book): Money
+    public static function getBookMoney(Book $book): Money
     {
         return Money::of(0, $book->getCurrency(), $book->getCashContext());
     }

@@ -20,8 +20,26 @@ class BooksTable extends AbstractTable
     public function rowSetup($row): void
     {
         $this->accounting = $row->getAccounting();
+    }
 
-        parent::rowSetup($row);
+    public function getName()
+    {
+        $this->row->getName();
+    }
+
+    public function getCurrency()
+    {
+        $this->row->getCurrency()->getCurrencyCode();
+    }
+
+    public function getCashFormat()
+    {
+        $this->row->getCashFormat();
+    }
+
+    public function getCashContext()
+    {
+        $this->row->getCashContext();
     }
 
     public function getAmount()
@@ -42,20 +60,5 @@ class BooksTable extends AbstractTable
     public function getEarnings()
     {
         $this->accounting->getBuyValueOfSells($this->row);
-    }
-
-    public function getCurrency()
-    {
-        $this->row->getCurrency()->getCurrencyCode();
-    }
-
-    public function getCashFormat()
-    {
-        $this->row->getCashFormat();
-    }
-
-    public function getCashContext()
-    {
-        $this->row->getCashContext();
     }
 }

@@ -6,6 +6,7 @@ use App\Component\Accounting\AbstractAccounting;
 use App\Component\Collection\EntryCollection;
 use Brick\Money\Context;
 use Brick\Money\Currency;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -85,7 +86,7 @@ class Book
 
     public function __construct()
     {
-        $this->entries = new EntryCollection();
+        $this->entries = new EntryCollection(new ArrayCollection([]));
     }
 
     public function getId(): ?int
@@ -122,7 +123,7 @@ class Book
      */
     public function getEntries(): EntryCollection
     {
-        return $this->entries;
+        return new EntryCollection($this->entries);
     }
 
     public function addEntry(Entry $entry): self

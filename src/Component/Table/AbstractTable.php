@@ -9,8 +9,8 @@ abstract class AbstractTable
 {
     private Table $table;
 
-    private array $columns;
-    private array $items;
+    private array $columns = [];
+    private array $items = [];
 
     protected mixed $row;
 
@@ -55,9 +55,13 @@ abstract class AbstractTable
         return $this;
     }
 
+    /**
+     * This method will be run on each row item before the column methods
+     * @param $row The current row item in the iteration
+     */
     protected function rowSetup($row): void { }
 
-    protected function preRender()
+    final protected function preRender()
     {
         $this->table->setHeaders(array_keys($this->columns));
 

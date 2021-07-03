@@ -4,25 +4,11 @@ namespace App\Component\Accounting;
 
 use App\Component\Amount;
 use App\Entity\Book;
-use App\Entity\Entry;
 use App\Service\BookService;
-use App\Service\EntryService;
 use Brick\Money\Money;
 
 abstract class AbstractAccounting implements AccountingInterface
 {
-    private $bookService;
-    private $entryService;
-
-    public function __construct(
-        BookService $bookService,
-        EntryService $entryService
-    )
-    {
-        $this->bookService = $bookService;
-        $this->entryService = $entryService;
-    }
-
     final public static function getDefaultIndexName(): string
     {
         return self::getKey();
@@ -51,7 +37,7 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getSellValue(Book $book): Money
     {
-        $money = $this->bookService->getBookMoney($book);
+        $money = BookService::getBookMoney($book);
 
         foreach ($book->getEntries()->getSells() as $sell) {
             $money->plus($sell->getValue());
@@ -73,7 +59,7 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getBuyValue(Book $book): Money
     {
-        $money = $this->bookService->getBookMoney($book);
+        $money = BookService::getBookMoney($book);
 
         foreach ($book->getEntries()->getBuys() as $sell) {
             $money->plus($sell->getValue());
