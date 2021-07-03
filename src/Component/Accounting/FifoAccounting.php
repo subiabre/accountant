@@ -6,6 +6,7 @@ use App\Component\Amount;
 use App\Component\Collection\EntryCollection;
 use App\Entity\Book;
 use Brick\Money\Money;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class FifoAccounting extends AbstractAccounting
 {
@@ -22,7 +23,7 @@ class FifoAccounting extends AbstractAccounting
     private function getBuysForAmount(Book $book, Amount $sellAmount): EntryCollection
     {
         $allBuys = $book->getEntries()->getBuys();
-        $soldBuys = new EntryCollection();
+        $soldBuys = new EntryCollection(new ArrayCollection([]));
 
         $i = 0;
         while ($sellAmount->getAvailable() > 0) {

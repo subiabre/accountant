@@ -12,7 +12,7 @@ abstract class AbstractTable
     private array $columns = [];
     private array $items = [];
 
-    protected mixed $row;
+    protected $row;
 
     public function __construct(OutputInterface $output)
     {

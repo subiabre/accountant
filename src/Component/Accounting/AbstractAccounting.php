@@ -5,6 +5,7 @@ namespace App\Component\Accounting;
 use App\Component\Amount;
 use App\Entity\Book;
 use App\Service\BookService;
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 
 abstract class AbstractAccounting implements AccountingInterface
@@ -70,6 +71,11 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getBuyValueAverage(Book $book): Money
     {
-        return $this->getBuyValue($book)->dividedBy($this->getBuyAmount($book));
+        $amount = $this->getBuyAmount($book)->getAvailable();
+
+        return $amount > 0 
+            ? $this->getBuyValue($book)->dividedBy($amount, RoundingMode::UP)
+            : BookService::getBookMoney($book)
+            ;
     }
 }

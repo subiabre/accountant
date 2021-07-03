@@ -37,11 +37,15 @@ class ReadBookCommand extends AbstractBookCommand
                 ['name' => $this->getSortOption($input)]
             );
 
-            $booksTable = new BooksTable($output);
-            $booksTable
-                ->setColumn('Name', 'getName')
-                ->addItems($books)
-                ->render();
+            try {
+                $booksTable = new BooksTable($output);
+                $booksTable
+                    ->setColumn('Name', 'getName')
+                    ->addItems($books)
+                    ->render();
+            } catch (\Exception $e) {
+                echo $e->getTraceAsString();
+            }
 
             return self::SUCCESS;
         }

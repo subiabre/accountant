@@ -15,6 +15,11 @@ class Amount
         $this->plus($amount);
     }
 
+    public function __toString()
+    {
+        return $this->getAvailable();
+    }
+
     /**
      * Get the total value for this amount
      * @return float

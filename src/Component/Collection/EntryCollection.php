@@ -20,7 +20,7 @@ class EntryCollection implements Collection, EntryCollectionInterface
     {
         $result = [];
 
-        foreach ($this->elements as $entry) {
+        foreach ($this->collection->toArray() as $entry) {
             if ($entry->getType() === $type) {
                 $result[] = $entry;
             }

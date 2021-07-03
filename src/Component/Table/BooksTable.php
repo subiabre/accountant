@@ -24,41 +24,50 @@ class BooksTable extends AbstractTable
 
     public function getName()
     {
-        $this->row->getName();
+        return $this->row->getName();
     }
 
     public function getCurrency()
     {
-        $this->row->getCurrency()->getCurrencyCode();
+        return $this->row->getCurrency()->getCurrencyCode();
     }
 
     public function getCashFormat()
     {
-        $this->row->getCashFormat();
+        return $this->row->getCashFormat();
     }
 
     public function getCashContext()
     {
-        $this->row->getCashContext();
+        return $this->row->getCashContext();
     }
 
     public function getAmount()
     {
-        $this->accounting->getDifferenceAmount($this->row);
+        return $this->accounting->getDifferenceAmount($this->row);
     }
 
     public function getAveragePrice()
     {
-        $this->accounting->getBuyValueAverage($this->row);
+        return $this->accounting
+            ->getBuyValueAverage($this->row)
+            ->formatTo($this->row->getCashFormat())
+            ;
     }
 
     public function getRevenue()
     {
-        $this->accounting->getSellValue($this->row);
+        return $this->accounting
+            ->getSellValue($this->row)
+            ->formatTo($this->row->getCashFormat())
+            ;
     }
 
     public function getEarnings()
     {
-        $this->accounting->getBuyValueOfSells($this->row);
+        return $this->accounting
+            ->getBuyValueOfSells($this->row)
+            ->formatTo($this->row->getCashFormat())
+            ;
     }
 }
