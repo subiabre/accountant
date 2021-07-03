@@ -40,9 +40,9 @@ class NewBookCommand extends AbstractBookCommand
     {
         $name = $input->getArgument('name');
         $currency = Currency::of($input->getArgument('currency'));
-        $accounting = $this->accountingService->getAccountingByKey($input->getArgument('accounting'))
-            ? $this->accountingService->getAccountingByKey($input->getArgument('accounting'))
-            : $this->accountingService->getAccountingByKey(Book::DEFAULT_ACCOUNTING_KEY)
+        $accounting = $this->accountingLocator->getByKey($input->getArgument('accounting'))
+            ? $this->accountingLocator->getByKey($input->getArgument('accounting'))
+            : $this->accountingLocator->getByKey(Book::DEFAULT_ACCOUNTING_KEY)
             ;
 
         try {

@@ -74,7 +74,7 @@ class ImportBookCommand extends AbstractBookCommand
         $book
             ->setName($data['name'])
             ->setCurrency(Currency::of($data['currency']['currencyCode']))
-            ->setAccounting($this->accountingFactory->get($data['accounting']['name']))
+            ->setAccounting($this->accountingService->getAccountingByKey($data['accounting']['key']))
             ->setIsHidden($data['hidden'] ? $data['hidden'] : Book::DEFAULT_HIDDEN)
             ->setCashContext(new CustomContext(
                     $data['cashContext']['scale'], 

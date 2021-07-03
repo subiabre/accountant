@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\AccountingService;
+use App\Component\Accounting\AccountingLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,12 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListAccountingsCommand extends Command
 {
-    private $accountingService;
+    private $accountingLocator;
 
-    public function __construct(AccountingService $accountingService)
+    public function __construct(AccountingLocator $accountingLocator)
     {
         parent::__construct();
-        $this->accountingService = $accountingService;
+        $this->accountingLocator = $accountingLocator;
     }
 
     protected function configure()
@@ -28,10 +28,10 @@ class ListAccountingsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $table = new Table($output);
-        $table->setHeaders(['Key', 'Description']);
+        $table->setHeaders(['Key', 'Name']);
 
-        foreach ($this->accountingService->getAccountings() as $accounting) {
-            $table->addRow([$accounting::getKey(), $accounting::getDescription()]);
+        foreach ($this->accountingLocator->getAll() as $accounting) {
+            $table->addRow([$accounting::getKey(), $accounting::getName()]);
         }
 
         $table->render();

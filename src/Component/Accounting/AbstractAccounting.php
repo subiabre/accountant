@@ -10,6 +10,15 @@ use Brick\Money\Money;
 
 abstract class AbstractAccounting implements AccountingInterface
 {
+    public string $key = '';
+    public string $name = '';
+
+    public function __construct()
+    {
+        $this->key = self::getKey();
+        $this->name = self::getName();
+    }
+
     final public static function getDefaultIndexName(): string
     {
         return self::getKey();

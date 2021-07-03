@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service;
+namespace App\Component\Accounting;
 
 use App\Component\Accounting\AbstractAccounting;
 use App\Component\Accounting\AccountingInterface;
 
-class AccountingService
+class AccountingLocator
 {
     private array $accountings;
 
@@ -18,7 +18,7 @@ class AccountingService
     /**
      * @return AccountingInterface[]
      */
-    public function getAccountings(): array
+    public function getAll(): array
     {
         return $this->accountings;
     }
@@ -27,7 +27,7 @@ class AccountingService
      * @param string $name
      * @return AbstractAccounting
      */
-    public function getAccountingByKey(string $name): ?AbstractAccounting
+    public function getByKey(string $name): ?AbstractAccounting
     {
         foreach ($this->accountings as $accounting) {
             return $accounting::getKey() === $name ? $accounting : null;

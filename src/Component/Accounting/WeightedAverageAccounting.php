@@ -12,7 +12,7 @@ class WeightedAverageAccounting extends AbstractAccounting
         return 'wa';
     }
 
-    public static function getDescription(): string
+    public static function getName(): string
     {
         return 'Weighted Average';
     }

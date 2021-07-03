@@ -15,7 +15,7 @@ class FifoAccounting extends AbstractAccounting
         return 'fifo';
     }
 
-    public static function getDescription(): string
+    public static function getName(): string
     {
         return 'First In, First Out';
     }

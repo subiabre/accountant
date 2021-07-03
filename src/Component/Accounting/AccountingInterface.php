@@ -10,7 +10,7 @@ interface AccountingInterface
 {
     public static function getKey(): string;
 
-    public static function getDescription(): string;
+    public static function getName(): string;
 
     /**
      * Get the difference between buys amount and sells amount \

@@ -41,6 +41,7 @@ class ReadBookCommand extends AbstractBookCommand
                 $booksTable = new BooksTable($output);
                 $booksTable
                     ->setColumn('Name', 'getName')
+		    ->setColumn('Accounting', 'getAccounting')
                     ->addItems($books)
                     ->render();
             } catch (\Exception $e) {

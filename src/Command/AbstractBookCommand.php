@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
+use App\Component\Accounting\AccountingLocator;
 use App\Entity\Book;
 use App\Repository\BookRepository;
-use App\Service\AccountingService;
 use App\Service\BookService;
 use App\Service\EntryService;
 use Brick\Money\Context;
@@ -30,21 +30,21 @@ abstract class AbstractBookCommand extends Command
     /** @var EntryService */
     protected $entryService;
 
-    /** @var AccountingService */
-    protected $accountingService;
+    /** @var AccountingLocator */
+    protected $accountingLocator;
 
     public function __construct(
         BookRepository $bookRepository, 
         BookService $bookService,
         EntryService $entryService,
-        AccountingService $accountingService
+        AccountingLocator $accountingLocator
     ){
         parent::__construct();
 
         $this->bookRepository = $bookRepository;
         $this->bookService = $bookService;
         $this->entryService = $entryService;
-        $this->accountingService = $accountingService;
+        $this->accountingLocator = $accountingLocator;
     }
 
     protected function getHiddenOption(InputInterface $input, Book $book): bool
