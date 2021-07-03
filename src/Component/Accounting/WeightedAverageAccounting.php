@@ -2,7 +2,6 @@
 
 namespace App\Component\Accounting;
 
-use App\Entity\Book;
 use Brick\Money\Money;
 
 class WeightedAverageAccounting extends AbstractAccounting

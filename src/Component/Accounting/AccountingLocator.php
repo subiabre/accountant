@@ -30,7 +30,9 @@ class AccountingLocator
     public function getByKey(string $name): ?AbstractAccounting
     {
         foreach ($this->accountings as $accounting) {
-            return $accounting::getKey() === $name ? $accounting : null;
+            if ($accounting::getKey() === $name) return $accounting;
         }
+
+        return null;
     }
 }
