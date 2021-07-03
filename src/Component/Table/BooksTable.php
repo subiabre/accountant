@@ -17,7 +17,12 @@ class BooksTable extends AbstractTable
         $this->setColumn('Earnings', 'getEarnings');
     }
 
-    public function rowSetup($row): void
+    protected function beforeRows($rows): void
+    {
+        return;
+    }
+
+    protected function onRow($row): void
     {
         $this->accounting = $row->getAccounting();
     }

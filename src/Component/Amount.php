@@ -17,7 +17,7 @@ class Amount
 
     public function __toString()
     {
-        return $this->getAvailable();
+        return strval($this->getAvailable());
     }
 
     /**

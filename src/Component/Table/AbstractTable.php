@@ -32,6 +32,13 @@ abstract class AbstractTable
         return $this;
     }
 
+    final public function clearColumns(): self
+    {
+        $this->columns = [];
+
+        return $this;
+    }
+
     final public function removeColumn(string $header): self
     {
         $this->columns = array_filter(array_diff_key($this->columns, [$header]));
@@ -56,17 +63,24 @@ abstract class AbstractTable
     }
 
     /**
+     * This method will be run once before the row items are iterated
+     * @param $rows The complete row items array
+     */
+    abstract protected function beforeRows($rows): void;
+
+    /**
      * This method will be run on each row item before the column methods
      * @param $row The current row item in the iteration
      */
-    protected function rowSetup($row): void { }
+    abstract protected function onRow($row): void;
 
     final protected function preRender()
     {
         $this->table->setHeaders(array_keys($this->columns));
 
+        $this->setupRows($this->items);
         foreach ($this->items as $item) {
-            $this->rowSetup($item);
+            $this->setupRow($item);
             $this->row = $item;
 
             $row = [];
@@ -80,6 +94,7 @@ abstract class AbstractTable
 
     final public function render()
     {
+        $this->configure();
         $this->preRender();
 
         return $this->table->render();
