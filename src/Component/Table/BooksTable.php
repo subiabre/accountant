@@ -81,7 +81,7 @@ class BooksTable extends AbstractTable
     public function getEarnings()
     {
         return $this->accounting
-            ->getBuyValueOfSells()
+            ->getDifferenceValue()
             ->formatTo($this->row->getCashFormat())
             ;
     }

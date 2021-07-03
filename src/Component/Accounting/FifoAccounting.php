@@ -22,7 +22,10 @@ class FifoAccounting extends AbstractAccounting
         return 'First In, First Out';
     }
 
-    private function getBuysForAmount(Book $book, BigDecimal $sellAmount): EntryCollection
+    /**
+     * @return Entry[]
+     */
+    private function getBuysForAmount(Book $book, BigDecimal $sellAmount): array
     {
         $allBuys = $book->getEntries()->getBuys();
         $soldBuys = new EntryCollection(new ArrayCollection([]));
@@ -36,13 +39,13 @@ class FifoAccounting extends AbstractAccounting
                 $buy->setAmount($sellAmount);
             }
 
-            $sellAmount->minus($buy->getAmount());
+            $sellAmount = $sellAmount->minus($buy->getAmount());
             $soldBuys->add($buy);
 
             $i++;
         }
 
-        return $soldBuys;
+        return $soldBuys->toArray();
     }
 
     public function getBuyValueOfSells(): Money
@@ -50,8 +53,8 @@ class FifoAccounting extends AbstractAccounting
         $soldBuys = $this->getBuysForAmount($this->book, $this->getSellAmount());
 
         $cost = BookService::getBookMoney(0, $this->book);
-        foreach ($soldBuys->getSells() as $soldBuy) {
-            $cost->plus($soldBuy->getValue());
+        foreach ($soldBuys as $soldBuy) {
+            $cost = $cost->plus($soldBuy->getValue());
         }
 
         return $cost;
