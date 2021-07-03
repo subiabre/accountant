@@ -23,6 +23,7 @@ class EntriesTable extends AbstractTable
         $this->setColumn('Type', 'getType');
         $this->setColumn('Amount', 'getAmount');
         $this->setColumn('Value', 'getValue');
+        $this->setColumn('Avg. Value', 'getAverage');
         $this->setColumn('T. Amount', 'getTotalAmount');
         $this->setColumn('T. Avg. Price', 'getTotalAverage');
         $this->setColumn('T. Revenue', 'getTotalRevenue');
@@ -38,7 +39,12 @@ class EntriesTable extends AbstractTable
     {
         $this->entry = $row;
         $this->book = $row->getBook();
-        $this->tempBook->addEntry($row);
+        $this->tempBook
+            ->addEntry($row)
+            ->setAccounting($row->getBook()->getAccounting())
+            ->setCurrency($row->getBook()->getCurrency())
+            ->setCashContext($row->getBook()->getCashContext())
+            ;
     }
 
     public function getId()
@@ -67,6 +73,13 @@ class EntriesTable extends AbstractTable
             ->getValue()
             ->formatTo($this->book->getCashFormat())
             ;
+    }
+
+    public function getAverage()
+    {
+        return $this->entry
+            ->getValueAverage()
+            ->formatTo($this->book->getCashFormat());
     }
 
     public function getTotalAmount()
