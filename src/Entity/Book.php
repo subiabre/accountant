@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
 /**
- * @ORM\MappedSuperclass
  * @ORM\Entity(repositoryClass=App\Repository\BookRepository::class)
  */
 class Book
@@ -53,7 +52,7 @@ class Book
     private $currency;
 
     /**
-     * @ORM\OneToMany(targetEntity="Entry", mappedBy="book")
+     * @ORM\OneToMany(targetEntity="Entry", mappedBy="book", cascade={"persist"})
      * @Serializer\Groups({"default"})
      */
     private $entries;

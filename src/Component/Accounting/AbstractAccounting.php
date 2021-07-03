@@ -37,10 +37,10 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
 
     public function getSellAmount(): BigDecimal
     {
-        $amount = new BigDecimal(AccountingInterface::INITIAL_AMOUNT);
+        $amount = BigDecimal::of(AccountingInterface::INITIAL_AMOUNT);
 
         foreach ($this->book->getEntries()->getSells() as $sell) {
-            $amount->plus($sell->getAmount());
+            $amount = $amount->plus($sell->getAmount());
         }
 
         return $amount;
@@ -51,7 +51,7 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
         $money = BookService::getBookMoney(0, $this->book);
 
         foreach ($this->book->getEntries()->getSells() as $sell) {
-            $money->plus($sell->getValue());
+            $money = $money->plus($sell->getValue());
         }
 
         return $money;
@@ -59,10 +59,10 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
 
     public function getBuyAmount(): BigDecimal
     {
-        $amount = new BigDecimal(AccountingInterface::INITIAL_AMOUNT);
+        $amount = BigDecimal::of(AccountingInterface::INITIAL_AMOUNT);
 
         foreach ($this->book->getEntries()->getBuys() as $buy) {
-            $amount->plus($buy->getAmount());
+            $amount = $amount->plus($buy->getAmount());
         }
 
         return $amount;
@@ -73,7 +73,7 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
         $money = BookService::getBookMoney(0, $this->book);
 
         foreach ($this->book->getEntries()->getBuys() as $buy) {
-            $money->plus($buy->getValue());
+            $money = $money->plus($buy->getValue());
         }
 
         return $money;

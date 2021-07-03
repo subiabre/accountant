@@ -48,6 +48,7 @@ class NewEntryCommand extends AbstractBookCommand
 
         $entry = new Entry();
         $entry
+            ->setBook($book)
             ->setType($type)
             ->setDate(new DateTime())
             ->setAmount($amount)
