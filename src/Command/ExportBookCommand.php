@@ -6,6 +6,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -29,7 +31,12 @@ class ExportBookCommand extends AbstractBookCommand
         /** @var Book[] */
         $books = empty($names) ? $this->bookRepository->findAll() : $this->bookRepository->findBy(['name' => $names]);
 
-        $serializer = new Serializer([ new ObjectNormalizer()], [new JsonEncoder()]);
+        $normalizers = [ 
+            new ObjectNormalizer(), 
+            new DateTimeNormalizer(),
+            new JsonSerializableNormalizer()
+        ];
+        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
         file_put_contents($filename, $serializer->serialize($books, 'json', ['groups' => 'default']));
 
         return self::SUCCESS;

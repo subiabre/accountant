@@ -3,10 +3,10 @@
 namespace App\Command;
 
 use App\Component\Amount;
-use App\Component\Table\BookEntriesTable;
+use App\Component\Table\BooksTable;
 use App\Entity\Book;
 use App\Entity\Entry;
-use Brick\Money\Money;
+use App\Service\BookService;
 use DateTime;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,7 +44,7 @@ class NewEntryCommand extends AbstractBookCommand
         }
 
         $amount = new Amount(floatval($input->getArgument('amount')));
-        $cost = Money::of($input->getArgument('cost'), $book->getCurrency());
+        $cost = BookService::getBookMoney($input->getArgument('cost'), $book);
 
         $entry = new Entry();
         $entry
@@ -58,9 +58,9 @@ class NewEntryCommand extends AbstractBookCommand
 
         $this->bookService->saveBook($book);
 
-        $table = new BookEntriesTable($output, $this->bookService);
+        $table = new BooksTable($output);
         $table
-            ->setBook($book, -1)
+            ->addItem($book)
             ->render();
         
         return self::SUCCESS;

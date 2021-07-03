@@ -52,6 +52,11 @@ class BooksTable extends AbstractTable
         return $this->row->getAccounting()::getName();
     }
 
+    public function getAccountingKey()
+    {
+        return $this->row->getAccounting()::getKey();
+    }
+
     public function getAmount()
     {
         return $this->accounting->getDifferenceAmount($this->row);

@@ -7,18 +7,10 @@ use App\Entity\Book;
 use App\Service\BookService;
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
+use JsonSerializable;
 
-abstract class AbstractAccounting implements AccountingInterface
+abstract class AbstractAccounting implements AccountingInterface, JsonSerializable
 {
-    public string $key = '';
-    public string $name = '';
-
-    public function __construct()
-    {
-        $this->key = self::getKey();
-        $this->name = self::getName();
-    }
-
     final public static function getDefaultIndexName(): string
     {
         return self::getKey();
@@ -47,7 +39,7 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getSellValue(Book $book): Money
     {
-        $money = BookService::getBookMoney($book);
+        $money = BookService::getBookMoney(0, $book);
 
         foreach ($book->getEntries()->getSells() as $sell) {
             $money->plus($sell->getValue());
@@ -69,10 +61,10 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getBuyValue(Book $book): Money
     {
-        $money = BookService::getBookMoney($book);
+        $money = BookService::getBookMoney(0, $book);
 
-        foreach ($book->getEntries()->getBuys() as $sell) {
-            $money->plus($sell->getValue());
+        foreach ($book->getEntries()->getBuys() as $buy) {
+            $money->plus($buy->getValue());
         }
 
         return $money;
@@ -84,7 +76,15 @@ abstract class AbstractAccounting implements AccountingInterface
 
         return $amount > 0 
             ? $this->getBuyValue($book)->dividedBy($amount, RoundingMode::UP)
-            : BookService::getBookMoney($book)
+            : BookService::getBookMoney(0, $book)
             ;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'key' => self::getKey(),
+            'name' => self::getName() 
+        ];
     }
 }
