@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Component\Amount;
+use App\Service\BookService;
+use Brick\Math\BigDecimal;
 use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -86,12 +87,12 @@ class Entry
         return $this;
     }
 
-    public function getAmount(): Amount
+    public function getAmount(): BigDecimal
     {
         return $this->amount;
     }
 
-    public function setAmount(Amount $amount): self
+    public function setAmount(BigDecimal $amount): self
     {
         $this->amount = $amount;
 
@@ -112,7 +113,10 @@ class Entry
 
     public function getValueAverage(): Money
     {
-        return $this->value->dividedBy($this->amount);
+        return $this->amount->isGreaterThan(0)
+            ? $this->value->dividedBy($this->amount) 
+            : BookService::getBookMoney(0, $this->book)
+            ;
     }
 
     public function getDate(): ?\DateTimeInterface

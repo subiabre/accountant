@@ -5,6 +5,8 @@ namespace App\Component\Accounting;
 use App\Component\Amount;
 use App\Component\Collection\EntryCollection;
 use App\Entity\Book;
+use App\Service\BookService;
+use Brick\Math\BigDecimal;
 use Brick\Money\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -20,17 +22,17 @@ class FifoAccounting extends AbstractAccounting
         return 'First In, First Out';
     }
 
-    private function getBuysForAmount(Book $book, Amount $sellAmount): EntryCollection
+    private function getBuysForAmount(Book $book, BigDecimal $sellAmount): EntryCollection
     {
         $allBuys = $book->getEntries()->getBuys();
         $soldBuys = new EntryCollection(new ArrayCollection([]));
 
         $i = 0;
-        while ($sellAmount->getAvailable() > 0) {
+        while ($sellAmount->isGreaterThan(0)) {
             $buy = $allBuys[$i];
 
-            if ($buy->getAmount()->getAvailable() > $sellAmount->getAvailable()) {
-                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount->getAvailable()));
+            if ($buy->getAmount()->isGreaterThan($sellAmount)) {
+                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount));
                 $buy->setAmount($sellAmount);
             }
 
@@ -43,11 +45,11 @@ class FifoAccounting extends AbstractAccounting
         return $soldBuys;
     }
 
-    public function getBuyValueOfSells(Book $book): Money
+    public function getBuyValueOfSells(): Money
     {
-        $soldBuys = $this->getBuysForAmount($book, $this->getSellAmount($book));
+        $soldBuys = $this->getBuysForAmount($this->book, $this->getSellAmount());
 
-        $cost = Money::of(0, $book->getCurrency(), $book->getCashContext());
+        $cost = BookService::getBookMoney(0, $this->book);
         foreach ($soldBuys->getSells() as $soldBuy) {
             $cost->plus($soldBuy->getValue());
         }

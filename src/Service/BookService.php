@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Book;
 use App\Entity\Entry;
-use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use Doctrine\ORM\EntityManagerInterface;
 

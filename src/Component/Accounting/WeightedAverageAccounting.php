@@ -17,8 +17,8 @@ class WeightedAverageAccounting extends AbstractAccounting
         return 'Weighted Average';
     }
 
-    public function getBuyValueOfSells(Book $book): Money
+    public function getBuyValueOfSells(): Money
     {
-        return $this->getBuyValueAverage($book)->multipliedBy($this->getSellAmount($book));
+        return $this->getBuyValueAverage()->multipliedBy($this->getSellAmount());
     }
 }

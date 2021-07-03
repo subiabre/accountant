@@ -2,11 +2,11 @@
 
 namespace App\Command;
 
-use App\Component\Amount;
 use App\Component\Table\BooksTable;
 use App\Entity\Book;
 use App\Entity\Entry;
 use App\Service\BookService;
+use Brick\Math\BigDecimal;
 use DateTime;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,7 +43,7 @@ class NewEntryCommand extends AbstractBookCommand
             return self::FAILURE;
         }
 
-        $amount = new Amount(floatval($input->getArgument('amount')));
+        $amount = BigDecimal::of($input->getArgument('amount'));
         $cost = BookService::getBookMoney($input->getArgument('cost'), $book);
 
         $entry = new Entry();

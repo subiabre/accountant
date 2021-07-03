@@ -2,81 +2,90 @@
 
 namespace App\Component\Accounting;
 
-use App\Component\Amount;
 use App\Entity\Book;
 use App\Service\BookService;
+use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use JsonSerializable;
 
 abstract class AbstractAccounting implements AccountingInterface, JsonSerializable
 {
+    protected Book $book;
+
     final public static function getDefaultIndexName(): string
     {
         return self::getKey();
     }
 
-    public function getDifferenceAmount(Book $book): Amount
+    public function setBook(Book $book): AccountingInterface
     {
-        return $this->getBuyAmount($book)->minus($this->getSellAmount($book));
+        $this->book = $book;
+
+        return $this;
     }
 
-    public function getDifferenceValue(Book $book): Money
+    public function getDifferenceAmount(): BigDecimal
     {
-        return $this->getSellValue($book)->minus($this->getBuyValueOfSells($book));
+        return $this->getBuyAmount()->minus($this->getSellAmount());
     }
 
-    public function getSellAmount(Book $book): Amount
+    public function getDifferenceValue(): Money
     {
-        $amount = new Amount();
+        return $this->getSellValue()->minus($this->getBuyValueOfSells());
+    }
 
-        foreach ($book->getEntries()->getSells() as $sell) {
+    public function getSellAmount(): BigDecimal
+    {
+        $amount = new BigDecimal(AccountingInterface::INITIAL_AMOUNT);
+
+        foreach ($this->book->getEntries()->getSells() as $sell) {
             $amount->plus($sell->getAmount());
         }
 
         return $amount;
     }
 
-    public function getSellValue(Book $book): Money
+    public function getSellValue(): Money
     {
-        $money = BookService::getBookMoney(0, $book);
+        $money = BookService::getBookMoney(0, $this->book);
 
-        foreach ($book->getEntries()->getSells() as $sell) {
+        foreach ($this->book->getEntries()->getSells() as $sell) {
             $money->plus($sell->getValue());
         }
 
         return $money;
     }
 
-    public function getBuyAmount(Book $book): Amount
+    public function getBuyAmount(): BigDecimal
     {
-        $amount = new Amount();
+        $amount = new BigDecimal(AccountingInterface::INITIAL_AMOUNT);
 
-        foreach ($book->getEntries()->getBuys() as $buy) {
+        foreach ($this->book->getEntries()->getBuys() as $buy) {
             $amount->plus($buy->getAmount());
         }
 
         return $amount;
     }
 
-    public function getBuyValue(Book $book): Money
+    public function getBuyValue(): Money
     {
-        $money = BookService::getBookMoney(0, $book);
+        $money = BookService::getBookMoney(0, $this->book);
 
-        foreach ($book->getEntries()->getBuys() as $buy) {
+        foreach ($this->book->getEntries()->getBuys() as $buy) {
             $money->plus($buy->getValue());
         }
 
         return $money;
     }
 
-    public function getBuyValueAverage(Book $book): Money
+    public function getBuyValueAverage(): Money
     {
-        $amount = $this->getBuyAmount($book)->getAvailable();
+        $amount = $this->getBuyAmount();
 
-        return $amount > 0 
-            ? $this->getBuyValue($book)->dividedBy($amount, RoundingMode::UP)
-            : BookService::getBookMoney(0, $book)
+        return $amount->isGreaterThan(0) 
+            ? $this->getBuyValue()->dividedBy($amount, RoundingMode::UP)
+            : BookService::getBookMoney(0, $this->book)
             ;
     }
 

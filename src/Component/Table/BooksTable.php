@@ -59,13 +59,13 @@ class BooksTable extends AbstractTable
 
     public function getAmount()
     {
-        return $this->accounting->getDifferenceAmount($this->row);
+        return $this->accounting->getDifferenceAmount();
     }
 
     public function getAveragePrice()
     {
         return $this->accounting
-            ->getBuyValueAverage($this->row)
+            ->getBuyValueAverage()
             ->formatTo($this->row->getCashFormat())
             ;
     }
@@ -73,7 +73,7 @@ class BooksTable extends AbstractTable
     public function getRevenue()
     {
         return $this->accounting
-            ->getSellValue($this->row)
+            ->getSellValue()
             ->formatTo($this->row->getCashFormat())
             ;
     }
@@ -81,7 +81,7 @@ class BooksTable extends AbstractTable
     public function getEarnings()
     {
         return $this->accounting
-            ->getBuyValueOfSells($this->row)
+            ->getBuyValueOfSells()
             ->formatTo($this->row->getCashFormat())
             ;
     }

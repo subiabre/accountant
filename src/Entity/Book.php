@@ -144,7 +144,7 @@ class Book
 
     public function getAccounting(): AbstractAccounting
     {
-        return $this->accounting;
+        return $this->accounting->setBook($this);
     }
 
     public function setAccounting(AbstractAccounting $accounting): self
