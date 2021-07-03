@@ -32,7 +32,7 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
 
     public function getDifferenceValue(): Money
     {
-        return $this->getSellValue()->minus($this->getBuyValueOfSells());
+        return $this->getSellValue()->minus($this->getBuyValueOfSells(), RoundingMode::UP);
     }
 
     public function getSellAmount(): BigDecimal
@@ -51,7 +51,7 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
         $money = BookService::getBookMoney(0, $this->book);
 
         foreach ($this->book->getEntries()->getSells() as $sell) {
-            $money = $money->plus($sell->getValue());
+            $money = $money->plus($sell->getValue(), RoundingMode::UP);
         }
 
         return $money;
@@ -73,7 +73,7 @@ abstract class AbstractAccounting implements AccountingInterface, JsonSerializab
         $money = BookService::getBookMoney(0, $this->book);
 
         foreach ($this->book->getEntries()->getBuys() as $buy) {
-            $money = $money->plus($buy->getValue());
+            $money = $money->plus($buy->getValue(), RoundingMode::UP);
         }
 
         return $money;

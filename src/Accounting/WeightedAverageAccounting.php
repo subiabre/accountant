@@ -2,6 +2,7 @@
 
 namespace App\Accounting;
 
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 
 class WeightedAverageAccounting extends AbstractAccounting
@@ -18,6 +19,7 @@ class WeightedAverageAccounting extends AbstractAccounting
 
     public function getBuyValueOfSells(): Money
     {
-        return $this->getBuyValueAverage()->multipliedBy($this->getSellAmount());
+        return $this->getBuyValueAverage()
+            ->multipliedBy($this->getSellAmount(), RoundingMode::UP);
     }
 }

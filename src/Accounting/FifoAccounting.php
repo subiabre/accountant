@@ -6,6 +6,7 @@ use App\Collection\EntryCollection;
 use App\Entity\Book;
 use App\Service\BookService;
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -34,7 +35,7 @@ class FifoAccounting extends AbstractAccounting
             $buy = $allBuys[$i];
 
             if ($buy->getAmount()->isGreaterThan($sellAmount)) {
-                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount));
+                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount, RoundingMode::UP));
                 $buy->setAmount($sellAmount);
             }
 
@@ -53,7 +54,7 @@ class FifoAccounting extends AbstractAccounting
 
         $cost = BookService::getBookMoney(0, $this->book);
         foreach ($soldBuys as $soldBuy) {
-            $cost = $cost->plus($soldBuy->getValue());
+            $cost = $cost->plus($soldBuy->getValue(), RoundingMode::UP);
         }
 
         return $cost;
