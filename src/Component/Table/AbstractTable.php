@@ -78,9 +78,9 @@ abstract class AbstractTable
     {
         $this->table->setHeaders(array_keys($this->columns));
 
-        $this->setupRows($this->items);
+        $this->beforeRows($this->items);
         foreach ($this->items as $item) {
-            $this->setupRow($item);
+            $this->onRow($item);
             $this->row = $item;
 
             $row = [];
