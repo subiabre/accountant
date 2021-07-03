@@ -20,6 +20,13 @@ class EntriesTable extends AbstractTable
     {
         $this->setColumn('#', 'getId');
         $this->setColumn('Date', 'getDate');
+        $this->setColumn('Type', 'getType');
+        $this->setColumn('Amount', 'getAmount');
+        $this->setColumn('Value', 'getValue');
+        $this->setColumn('T. Amount', 'getTotalAmount');
+        $this->setColumn('T. Avg. Price', 'getTotalAverage');
+        $this->setColumn('T. Revenue', 'getTotalRevenue');
+        $this->setColumn('T. Earnings', 'getTotalEarnings');
     }
 
     protected function beforeRows($rows): void
@@ -58,6 +65,41 @@ class EntriesTable extends AbstractTable
     {
         return $this->entry
             ->getValue()
+            ->formatTo($this->book->getCashFormat())
+            ;
+    }
+
+    public function getTotalAmount()
+    {
+        return $this->tempBook
+            ->getAccounting()
+            ->getDifferenceAmount()
+            ;
+    }
+
+    public function getTotalAverage()
+    {
+        return $this->tempBook
+            ->getAccounting()
+            ->getBuyValueAverage()
+            ->formatTo($this->book->getCashFormat())
+            ;
+    }
+
+    public function getTotalRevenue()
+    {
+        return $this->tempBook
+            ->getAccounting()
+            ->getSellValue()
+            ->formatTo($this->book->getCashFormat())
+            ;
+    }
+
+    public function getTotalEarnings()
+    {
+        return $this->tempBook
+            ->getAccounting()
+            ->getDifferenceValue()
             ->formatTo($this->book->getCashFormat())
             ;
     }

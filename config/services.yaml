@@ -12,7 +12,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     
     _instanceof:
-        App\Component\Accounting\AbstractAccounting:
+        App\Accounting\AbstractAccounting:
             tags: ['app.accounting']
 
     # makes classes in src/ available to be used as services
@@ -25,7 +25,7 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
-    App\Component\Accounting\AccountingLocator:
+    App\Accounting\AccountingLocator:
         arguments: [!tagged { tag: 'app.accounting', index_by: 'key'}]
 
     # controllers are imported separately to make sure services can be injected
