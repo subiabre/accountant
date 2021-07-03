@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Command;
+namespace App\Console;
 
-use App\Component\Accounting\AccountingLocator;
+use App\Accounting\AccountingLocator;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use App\Service\BookService;
@@ -45,6 +45,14 @@ abstract class AbstractBookCommand extends Command
         $this->bookService = $bookService;
         $this->entryService = $entryService;
         $this->accountingLocator = $accountingLocator;
+    }
+
+    protected function parseAccounting($input)
+    {
+        return $this->accountingLocator->getByKey($input->getArgument('accounting'))
+        ? $this->accountingLocator->getByKey($input->getArgument('accounting'))
+        : $this->accountingLocator->getByKey(Book::DEFAULT_ACCOUNTING_KEY)
+        ;
     }
 
     protected function getHiddenOption(InputInterface $input, Book $book): bool

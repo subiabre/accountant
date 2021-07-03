@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Component\Accounting;
-
-use App\Component\Accounting\AbstractAccounting;
-use App\Component\Accounting\AccountingInterface;
+namespace App\Accounting;
 
 class AccountingLocator
 {

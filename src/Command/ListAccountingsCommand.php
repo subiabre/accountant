@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Component\Accounting\AccountingLocator;
+use App\Accounting\AccountingLocator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;

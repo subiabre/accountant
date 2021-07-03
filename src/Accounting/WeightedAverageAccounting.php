@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Component\Accounting;
+namespace App\Accounting;
 
 use Brick\Money\Money;
 

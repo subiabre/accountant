@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Component\Table;
+namespace App\Console\Table;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,7 +12,7 @@ abstract class AbstractTable
     private array $columns = [];
     private array $items = [];
 
-    protected $row;
+    private $row;
 
     public function __construct(OutputInterface $output)
     {
@@ -81,7 +81,6 @@ abstract class AbstractTable
         $this->beforeRows($this->items);
         foreach ($this->items as $item) {
             $this->onRow($item);
-            $this->row = $item;
 
             $row = [];
             foreach (array_values($this->columns) as $method) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Component\Collection;
+namespace App\Collection;
 
 use App\Entity\Entry;
 use Closure;

@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Component\Table\BookEntriesTable;
+use App\Console\AbstractBookCommand;
+use App\Console\Table\EntriesTable;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,10 +37,11 @@ class RemoveEntryCommand extends AbstractBookCommand
         
         $this->bookService->saveBook($book);
 
-        $table = new BookEntriesTable($output, $this->bookService);
+        $table = new EntriesTable($output);
         $table
-            ->setBook($book, -1)
-            ->render();
+            ->addItems($book->getEntries())
+            ->render()
+            ;
 
         
         return self::SUCCESS;

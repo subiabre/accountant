@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Console\AbstractBookCommand;
 use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

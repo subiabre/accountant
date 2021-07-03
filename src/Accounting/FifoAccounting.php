@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Component\Accounting;
+namespace App\Accounting;
 
-use App\Component\Amount;
-use App\Component\Collection\EntryCollection;
+use App\Collection\EntryCollection;
 use App\Entity\Book;
 use App\Service\BookService;
 use Brick\Math\BigDecimal;

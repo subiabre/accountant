@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Component\Accounting;
+namespace App\Accounting;
 
 use App\Entity\Book;
 use App\Service\BookService;

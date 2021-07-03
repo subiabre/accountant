@@ -3,8 +3,10 @@
 namespace App\Command;
 
 use App\Component\Amount;
+use App\Console\AbstractBookCommand;
 use App\Entity\Book;
 use App\Entity\Entry;
+use Brick\Math\BigDecimal;
 use Brick\Money\Context\CustomContext;
 use Brick\Money\Currency;
 use Brick\Money\Money;
@@ -94,7 +96,7 @@ class ImportBookCommand extends AbstractBookCommand
                         $entryData['date']['timestamp'],
                         new DateTimeZone($entryData['date']['timezone']['name'])
                     ))
-                ->setAmount(new Amount(floatval($entryData['amount'])))
+                ->setAmount(BigDecimal::of($entryData['amount']))
                 ->setValue(
                     Money::of(
                         floatval(sprintf('%d.%d', 

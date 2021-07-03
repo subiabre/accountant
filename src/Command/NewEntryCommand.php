@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Component\Table\BooksTable;
+use App\Console\AbstractBookCommand;
+use App\Console\Table\BooksTable;
 use App\Entity\Book;
 use App\Entity\Entry;
 use App\Service\BookService;

@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Component\Table\BookEntriesTable;
-use App\Component\Table\EntriesTable;
-use App\Component\Table\BooksTable;
+use App\Console\AbstractBookCommand;
+use App\Console\Table\BooksTable;
+use App\Console\Table\EntriesTable;
 use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +19,6 @@ class ReadBookCommand extends AbstractBookCommand
         $this->setDescription('Read all books overview or entries in a book');
     
         $this->addArgument('name', InputArgument::OPTIONAL, 'Book name to be read');
-        $this->addArgument('max', InputArgument::OPTIONAL, 'Max number of entries to print');
 
         $this->setCashContextOption();
         $this->setCashFormatOption();
@@ -40,9 +39,9 @@ class ReadBookCommand extends AbstractBookCommand
             $booksTable = new BooksTable($output);
             $booksTable
                 ->setColumn('Name', 'getName')
-                ->setColumn('Accounting', 'getAccountingKey')
                 ->addItems($books)
-                ->render();
+                ->render()
+                ;
 
             return self::SUCCESS;
         }
@@ -58,30 +57,11 @@ class ReadBookCommand extends AbstractBookCommand
         $book->setCashFormat($this->getCashFormatOption($input, $book));
         $book->setDateFormat($this->getDateFormatOption($input, $book));
 
-        $table = new BookEntriesTable($output, $this->bookService);
+        $table = new EntriesTable($output);
         $table
-            ->setSortOrder($this->getSortOption($input))
-            ->setBook(
-                $book, 
-                $this->getOffset($input), 
-                $this->getLength($input)
-            )
+            ->addItems($book->getEntries())
             ->render();
 
         return self::SUCCESS;
-    }
-
-    private function getOffset($input): int
-    {
-        $start = (int) $input->getArgument('max');
-
-        return $start < 0 ? $start : 0;
-    }
-
-    private function getLength($input): ?int
-    {
-        $start = (int) $input->getArgument('max');
-
-        return $start < 0 ? null : $start;
     }
 }

@@ -1,13 +1,17 @@
 <?php 
 
-namespace App\Component\Table;
+namespace App\Console\Table;
 
-use App\Component\Accounting\AccountingInterface;
+use App\Accounting\AccountingInterface;
+use App\Entity\Book;
 
 class BooksTable extends AbstractTable
 {
+    /** @var Book */
+    private Book $book;
+
     /** @var AccountingInterface */
-    private $accounting;
+    private AccountingInterface $accounting;
 
     public function configure(): void
     {
@@ -24,37 +28,38 @@ class BooksTable extends AbstractTable
 
     protected function onRow($row): void
     {
+        $this->book = $row;
         $this->accounting = $row->getAccounting();
     }
 
     public function getName()
     {
-        return $this->row->getName();
+        return $this->book->getName();
     }
 
     public function getCurrency()
     {
-        return $this->row->getCurrency()->getCurrencyCode();
+        return $this->book->getCurrency()->getCurrencyCode();
     }
 
     public function getCashFormat()
     {
-        return $this->row->getCashFormat();
+        return $this->book->getCashFormat();
     }
 
     public function getCashContext()
     {
-        return $this->row->getCashContext();
+        return $this->book->getCashContext();
     }
 
     public function getAccounting()
     {
-        return $this->row->getAccounting()::getName();
+        return $this->book->getAccounting()::getName();
     }
 
     public function getAccountingKey()
     {
-        return $this->row->getAccounting()::getKey();
+        return $this->book->getAccounting()::getKey();
     }
 
     public function getAmount()
@@ -66,7 +71,7 @@ class BooksTable extends AbstractTable
     {
         return $this->accounting
             ->getBuyValueAverage()
-            ->formatTo($this->row->getCashFormat())
+            ->formatTo($this->book->getCashFormat())
             ;
     }
 
@@ -74,7 +79,7 @@ class BooksTable extends AbstractTable
     {
         return $this->accounting
             ->getSellValue()
-            ->formatTo($this->row->getCashFormat())
+            ->formatTo($this->book->getCashFormat())
             ;
     }
 
@@ -82,7 +87,7 @@ class BooksTable extends AbstractTable
     {
         return $this->accounting
             ->getDifferenceValue()
-            ->formatTo($this->row->getCashFormat())
+            ->formatTo($this->book->getCashFormat())
             ;
     }
 }

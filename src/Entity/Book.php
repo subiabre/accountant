@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Component\Accounting\AbstractAccounting;
-use App\Component\Collection\EntryCollection;
+use App\Accounting\AbstractAccounting;
+use App\Collection\EntryCollection;
 use Brick\Money\Context;
 use Brick\Money\Currency;
 use Doctrine\Common\Collections\ArrayCollection;

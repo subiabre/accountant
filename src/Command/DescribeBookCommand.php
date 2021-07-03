@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Component\Table\BooksTable;
+use App\Console\AbstractBookCommand;
+use App\Console\Table\BooksTable;
 use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,7 @@ class DescribeBookCommand extends AbstractBookCommand
         $table
             ->setColumn('Currency', 'getCurrency')
             ->setColumn('Format', 'getCashFormat')
+            ->setColumn('Accounting', 'getAccounting')
             ->addItem($book)
             ->render();
 
