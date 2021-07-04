@@ -99,13 +99,21 @@ class ImportBookCommand extends AbstractBookCommand
                         $entryData['date'],
                         new DateTimeZone('UTC')
                     ))
-                ->setAmount(BigDecimal::of($entryData['amount']))
+                ->setAmount(
+                    BigDecimal::of(
+                        sprintf('%d.%d', 
+                            $entryData['amount']['integralPart'],
+                            $entryData['amount']['fractionalPart']
+                        )
+                    ))
                 ->setValue(
                     Money::of(
-                        floatval(sprintf('%d.%d', 
-                            $entryData['value']['amount']['integralPart'],
-                            $entryData['value']['amount']['fractionalPart']
-                        )), 
+                        BigDecimal::of(
+                            sprintf('%d.%d', 
+                                $entryData['value']['amount']['integralPart'],
+                                $entryData['value']['amount']['fractionalPart']
+                            )
+                        ), 
                         Currency::of($data['currency']['currencyCode'])
                     ))
                 ;
