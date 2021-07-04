@@ -37,20 +37,21 @@ class ExportBookCommand extends AbstractBookCommand
         /** @var Book[] */
         $books = empty($names) ? $this->bookRepository->findAll() : $this->bookRepository->findBy(['name' => $names]);
 
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $discriminator = new ClassDiscriminatorFromClassMetadata($classMetadataFactory);
-        $normalizers = [ 
-            new DateTimeNormalizer(),
-            new JsonSerializableNormalizer(),
-            new ObjectNormalizer(null, null, null, null, $discriminator, null, [
-                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                    return $object->getId();
-                }
-            ]), 
-        ];
-        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+        $serializer = new Serializer($this->getNormalizers(), [new JsonEncoder()]);
         file_put_contents($filename, $serializer->serialize($books, 'json', ['groups' => 'default']));
 
         return self::SUCCESS;
+    }
+
+    private function getNormalizers(): array
+    {
+        return [
+            new DateTimeNormalizer(),
+            new ObjectNormalizer(null, null, null, null, null, null, [
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                    return $object->getId();
+                }
+            ])
+        ];
     }
 }

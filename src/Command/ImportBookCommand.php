@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Component\Amount;
 use App\Console\AbstractBookCommand;
 use App\Entity\Book;
 use App\Entity\Entry;
@@ -76,7 +75,7 @@ class ImportBookCommand extends AbstractBookCommand
         $book
             ->setName($data['name'])
             ->setCurrency(Currency::of($data['currency']['currencyCode']))
-            ->setAccounting($this->accountingLocator->getByKey($data['accounting']['key']))
+            ->setAccounting($this->accountingLocator->getByKey($data['accountingKey']))
             ->setIsHidden($data['hidden'] ? $data['hidden'] : Book::DEFAULT_HIDDEN)
             ->setCashContext(new CustomContext(
                     $data['cashContext']['scale'], 
@@ -93,8 +92,8 @@ class ImportBookCommand extends AbstractBookCommand
                 ->setDate(
                     DateTime::createFromFormat(
                         'U',
-                        $entryData['date']['timestamp'],
-                        new DateTimeZone($entryData['date']['timezone']['name'])
+                        $entryData['date'],
+                        new DateTimeZone('UTC')
                     ))
                 ->setAmount(BigDecimal::of($entryData['amount']))
                 ->setValue(

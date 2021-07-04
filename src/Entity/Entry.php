@@ -6,6 +6,8 @@ use App\Service\BookService;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
 
@@ -58,6 +60,11 @@ class Entry
      * @Serializer\Groups({"default"})
      */
     private $date;
+
+    public function __construct()
+    {
+        $this->date = new DateTime('now', new DateTimeZone('UTC'));
+    }
 
     public function getId(): ?int
     {
@@ -120,12 +127,14 @@ class Entry
             ;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?\DateTime
     {
+        $this->date->setTimezone(date_default_timezone_get());
+
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(\DateTime $date): self
     {
         $this->date = $date;
 

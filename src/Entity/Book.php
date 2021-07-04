@@ -64,6 +64,12 @@ class Book
     private $accounting;
 
     /**
+     * @ORM\Column(type="string")
+     * @Serializer\Groups({"default"})
+     */
+    private $accountingKey;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isHidden;
@@ -149,6 +155,7 @@ class Book
     public function setAccounting(AbstractAccounting $accounting): self
     {
         $this->accounting = $accounting;
+        $this->accountingKey = $accounting::getKey();
 
         return $this;
     }

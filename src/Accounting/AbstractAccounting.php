@@ -7,25 +7,10 @@ use App\Service\BookService;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 use Brick\Money\Money;
-use Symfony\Component\Serializer\Annotation as Serializer;
 
-/**
- * @Serializer\DiscriminatorMap(typeProperty="type", mapping={
- *  "fifo"="App\Accounting\FifoAccounting",
- *  "wa"="App\Accounting\WeightedAverageAccounting"
- * })
- */
 abstract class AbstractAccounting implements AccountingInterface
 {
     protected Book $book;
-
-    final public function getData(): array
-    {
-        return [
-            'key' => self::getKey(),
-            'name' => self::getName()
-        ];
-    }
 
     final public static function getDefaultIndexName(): string
     {
