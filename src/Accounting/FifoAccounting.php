@@ -25,7 +25,7 @@ class FifoAccounting extends AbstractAccounting
     /**
      * @return Entry[]
      */
-    private function getBuysForAmount(Book $book, BigDecimal $sellAmount): array
+    protected function getBuysForAmount(Book $book, BigDecimal $sellAmount): array
     {
         $allBuys = $book->getEntries()->getBuys();
         $soldBuys = new EntryCollection(new ArrayCollection([]));

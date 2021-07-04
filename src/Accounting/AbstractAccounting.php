@@ -24,6 +24,29 @@ abstract class AbstractAccounting implements AccountingInterface
         return $this;
     }
 
+    protected function getEntriesAmount(array $entries): BigDecimal
+    {
+        $amount = BigDecimal::of(AccountingInterface::INITIAL_AMOUNT);
+
+        foreach ($entries as $entry) {
+            $amount = $amount->plus($entry->getAmount());
+        }
+
+        return $amount;
+    }
+
+    protected function getEntriesValue(array $entries): Money
+    {
+        $money = BookService::getBookMoney(0, $this->book);
+
+        foreach ($entries as $entry) {
+            $price = $entry->getValue()->toRational();
+            $money = $money->plus($price, RoundingMode::UP);
+        }
+
+        return $money;
+    }
+
     public function getDifferenceAmount(): BigDecimal
     {
         return $this->getBuyAmount()->minus($this->getSellAmount());
@@ -31,51 +54,28 @@ abstract class AbstractAccounting implements AccountingInterface
 
     public function getDifferenceValue(): Money
     {
-        return $this->getSellValue()->minus($this->getBuyValueOfSells(), RoundingMode::UP);
+        $cost = $this->getBuyValueOfSells()->toRational();
+        return $this->getSellValue()->minus($cost, RoundingMode::UP);
     }
 
     public function getSellAmount(): BigDecimal
     {
-        $amount = BigDecimal::of(AccountingInterface::INITIAL_AMOUNT);
-
-        foreach ($this->book->getEntries()->getSells() as $sell) {
-            $amount = $amount->plus($sell->getAmount());
-        }
-
-        return $amount;
+        return $this->getEntriesAmount($this->book->getEntries()->getSells());
     }
 
     public function getSellValue(): Money
     {
-        $money = BookService::getBookMoney(0, $this->book);
-
-        foreach ($this->book->getEntries()->getSells() as $sell) {
-            $money = $money->plus($sell->getValue(), RoundingMode::UP);
-        }
-
-        return $money;
+        return $this->getEntriesValue($this->book->getEntries()->getSells());
     }
 
     public function getBuyAmount(): BigDecimal
     {
-        $amount = BigDecimal::of(AccountingInterface::INITIAL_AMOUNT);
-
-        foreach ($this->book->getEntries()->getBuys() as $buy) {
-            $amount = $amount->plus($buy->getAmount());
-        }
-
-        return $amount;
+        return $this->getEntriesAmount($this->book->getEntries()->getBuys());
     }
 
     public function getBuyValue(): Money
     {
-        $money = BookService::getBookMoney(0, $this->book);
-
-        foreach ($this->book->getEntries()->getBuys() as $buy) {
-            $money = $money->plus($buy->getValue(), RoundingMode::UP);
-        }
-
-        return $money;
+        return $this->getEntriesValue($this->book->getEntries()->getBuys());
     }
 
     public function getBuyValueAverage(): Money

@@ -47,6 +47,7 @@ class BookService
     public function removeEntry(Entry $entry, Book $book): Book
     {
         $book->removeEntry($entry);
+        $this->em->remove($entry);
 
         return $book;
     }
