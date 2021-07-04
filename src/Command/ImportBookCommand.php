@@ -92,6 +92,7 @@ class ImportBookCommand extends AbstractBookCommand
         foreach ($data['entries'] as $entryData) {
             $entry = new Entry();
             $entry
+                ->setBook($book)
                 ->setType(array_key_exists('type', $entryData) ? strval($entryData['type']) : Entry::DEFAULT_TYPE)
                 ->setDate(
                     DateTime::createFromFormat(
@@ -114,7 +115,8 @@ class ImportBookCommand extends AbstractBookCommand
                                 $entryData['value']['amount']['fractionalPart']
                             )
                         ), 
-                        Currency::of($data['currency']['currencyCode'])
+                        $book->getCurrency(),
+                        $book->getCashContext()
                     ))
                 ;
 
