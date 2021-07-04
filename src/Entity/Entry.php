@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Service\BookService;
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -114,7 +115,7 @@ class Entry
     public function getValueAverage(): Money
     {
         return $this->amount->isGreaterThan(0)
-            ? $this->value->dividedBy($this->amount) 
+            ? $this->value->dividedBy($this->amount, RoundingMode::UP) 
             : BookService::getBookMoney(0, $this->book)
             ;
     }
