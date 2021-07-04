@@ -95,7 +95,7 @@ class ImportBookCommand extends AbstractBookCommand
                 ->setType(array_key_exists('type', $entryData) ? strval($entryData['type']) : Entry::DEFAULT_TYPE)
                 ->setDate(
                     DateTime::createFromFormat(
-                        'U',
+                        DateTime::RFC3339,
                         $entryData['date'],
                         new DateTimeZone('UTC')
                     ))
