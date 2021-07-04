@@ -4,6 +4,7 @@ namespace App\Accounting;
 
 use App\Collection\EntryCollection;
 use App\Entity\Book;
+use App\Entity\Entry;
 use App\Service\BookService;
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
@@ -25,27 +26,34 @@ class FifoAccounting extends AbstractAccounting
     /**
      * @return Entry[]
      */
-    protected function getBuysForAmount(Book $book, BigDecimal $sellAmount): array
+    protected function getBuysForAmount(Book $book, BigDecimal $amount): array
     {
-        $allBuys = $book->getEntries()->getBuys();
-        $soldBuys = new EntryCollection(new ArrayCollection([]));
+        $buys = new EntryCollection(new ArrayCollection([]));
 
         $i = 0;
-        while ($sellAmount->isGreaterThan(0)) {
-            $buy = $allBuys[$i];
+        while ($amount->isGreaterThan(0)) {
+            $buy = $book->getEntries()->getBuys()[$i];
 
-            if ($buy->getAmount()->isGreaterThan($sellAmount)) {
-                $buy->setValue($buy->getValueAverage()->multipliedBy($sellAmount, RoundingMode::UP));
-                $buy->setAmount($sellAmount);
+            if ($buy->getAmount()->isGreaterThanOrEqualTo($amount)) {
+                $endBuy = new Entry();
+                $endBuy
+                    ->setType(Entry::BUY)
+                    ->setValue($buy->getValueAverage()->multipliedBy($amount, RoundingMode::UP))
+                    ->setAmount($amount)
+                    ;
+
+                $amount = BigDecimal::of(0);
+                $buys->add($endBuy);
+                continue;
             }
 
-            $sellAmount = $sellAmount->minus($buy->getAmount());
-            $soldBuys->add($buy);
+            $amount = $amount->minus($buy->getAmount());
+            $buys->add($buy);
 
             $i++;
         }
 
-        return $soldBuys->toArray();
+        return $buys->toArray();
     }
 
     public function getBuyValueOfSells(): Money
