@@ -129,7 +129,7 @@ class Entry
 
     public function getDate(): ?\DateTime
     {
-        $this->date->setTimezone(date_default_timezone_get());
+        $this->date->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
         return $this->date;
     }

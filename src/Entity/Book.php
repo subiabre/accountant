@@ -160,6 +160,11 @@ class Book
         return $this;
     }
 
+    public function getAccountingKey(): string
+    {
+        return $this->accountingKey;
+    }
+
     public function isHidden(): bool
     {
         return (bool) $this->isHidden;

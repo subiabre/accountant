@@ -31,7 +31,7 @@ class ExportBookCommand extends AbstractBookCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $filename = sprintf('%s.json', rtrim($input->getArgument('filename'), '.json'));
+        $filename = $this->normalizeFilename($input->getArgument('filename'));
         $names = $input->getArgument('books');
 
         /** @var Book[] */
@@ -41,6 +41,13 @@ class ExportBookCommand extends AbstractBookCommand
         file_put_contents($filename, $serializer->serialize($books, 'json', ['groups' => 'default']));
 
         return self::SUCCESS;
+    }
+
+    private function normalizeFilename(string $filename): string
+    {
+        $filename = preg_replace('/[^a-z0-9\._-]+/gi', '_', trim($filename));
+        
+        return sprintf('%s.json', preg_replace('/.json$/', '', $filename));
     }
 
     private function getNormalizers(): array
