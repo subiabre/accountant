@@ -45,8 +45,8 @@ class ExportBookCommand extends AbstractBookCommand
 
     private function normalizeFilename(string $filename): string
     {
-        $filename = preg_replace('/[^a-z0-9\._-]+/gi', '_', trim($filename));
-        
+        $filename = preg_replace('/[^a-z0-9\._-]+/', '_', trim($filename));
+
         return sprintf('%s.json', preg_replace('/.json$/', '', $filename));
     }
 
