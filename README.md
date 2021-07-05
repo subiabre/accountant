@@ -1,6 +1,22 @@
 # reck
 Command line accounting tool.
 
+1. [About](#about)
+2. [Installation](#installation)
+    1. [Prerequisites](#prerequisites)
+    2. [Installing](#installing)
+    3. [Configuring the database](#configuring-the-database)
+    4. [Setting up reck globally](#setting-up-reck-globally)
+3. [Usage](#usage)
+    1. [Basic usage](#basic-usage)
+    2. [How to work with reck](#how-to-work-with-reck)
+4. [Roadmap](#roadmap)
+
+# About
+`reck` is a command line application to record and manage inventory and accountancy of items. It can help you to:
+- keep track of buys and sales
+- calculate costs, revenue and earnings
+
 # Installation
 
 ## Prerequisites
@@ -8,21 +24,25 @@ This application requires that your system has:
 - [php](http://php.net)
 - [composer](http://getcomposer.org)
 
-Additionally, you will have to install the php driver for your database of choice, e.g: `php-mysql` and you'll may need to install `php-intl` and `php-xml`.
+Additionally, you will have to install the php driver for your database of choice, e.g: `php-mysql` and you may need to install `php-intl` and `php-xml`.
 
-## Install
+## Installing
 Download or clone this repository.
 ```bash
 git clone https://github.com/subiabre/reck
 cd reck
 ```
 
-Install the dependencies
+Install the dependencies.
 ```bash
 composer install
 ```
 
 ### Configuring the database
+`reck` works by storing entries in a local database instance. Before starting to use it, you need to set up your database and configure reck to work with it. This can be a tiresome task but this application attempts to make it as easy as possible for you.
+
+After completing the necessary steps to work with your database of choice on your system and installing the php driver for it:
+
 Copy the *.env* file.
 ```bash
 cp .env .env.local
@@ -36,7 +56,6 @@ DATABASE_URL="mysql://myuser:password@127.0.0.1:5432/database?serverVersion=13&c
 ```
 Example SQLite:
 ```.env
-# sqlite
 DATABASE_URL="sqlite:///%kernel.project_dir%/var/app.db"
 ```
 
@@ -44,6 +63,8 @@ Once `reck` knows where the database is at let it handle all the schema creation
 ```bash
 composer run-script database-start
 ```
+
+And you're ready to go and account. However, you may like to be able to access your accouning data from anywhere on the machine:
 
 ### Setting up `reck` globally
 Aditionally, and since this application is entirely console-based, on *nix systems you can create a symlink so you can run this app from anywhere.
@@ -55,7 +76,7 @@ sudo chmod +x /usr/local/bin/reck
 # Usage
 
 ## Basic usage
-Get a list of available reck commands:
+Get a list of available commands:
 ```bash
 reck list commands
 ```
@@ -84,8 +105,8 @@ reck books
 reck read chairs
 ```
 
-### Recording transactions
-Now each time you buy and sell one of those items in your shop, tell `reck` by adding a new entry to that book:
+### Recording buys and sales
+Each time you buy or sell one of the items in your shop tell `reck` by adding a new entry to that book:
 ```bash
 # Bought chairs, 10 units at a total price of 90
 reck add buy chairs 10 90
@@ -126,3 +147,9 @@ reck export my_shop_accounting_books.json
 reck import my_shop_accounting_books.json
 ```
 This file is not encrypted and anyone with access to this file can access your accounting information as it was when the file was generated. You should keep this file safe and delete it once you've imported it's content.
+
+# Roadmap
+- [ ] Add unit tests and code coverage
+- [ ] Add LIFO accounting
+- [ ] Join books entries: `reck join book1 book2`
+- [ ] Set passwords: `reck new fifo EUR P455W0RD`
