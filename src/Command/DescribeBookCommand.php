@@ -13,9 +13,9 @@ class DescribeBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:describe:book');
+        $this->setName('commands:describe:book');
         $this->setAliases(['desc']);
-        $this->setDescription('Show data from a book');
+        $this->setDescription('Show a book details');
     
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name to be read');
     }

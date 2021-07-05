@@ -14,9 +14,9 @@ class ReadBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:read:book');
-        $this->setAliases(['read']);
-        $this->setDescription('Read all books overview or entries in a book');
+        $this->setName('commands:read:book');
+        $this->setAliases(['read', 'books']);
+        $this->setDescription('Read all books general data or historic of entries in a book');
     
         $this->addArgument('name', InputArgument::OPTIONAL, 'Book name to be read');
 

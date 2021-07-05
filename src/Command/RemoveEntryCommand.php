@@ -12,7 +12,7 @@ class RemoveEntryCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:remove:entry');
+        $this->setName('commands:remove:entry');
         $this->setAliases(['erase']);
         $this->setDescription('Delete an entry from a book');
     

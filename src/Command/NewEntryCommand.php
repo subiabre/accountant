@@ -17,9 +17,9 @@ class NewEntryCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:new:add');
+        $this->setName('commands:new:entry');
         $this->setAliases(['add']);
-        $this->setDescription('Add a new buy entry to a book');
+        $this->setDescription('Add a new entry to a book');
     
         $this->addArgument('type', InputArgument::REQUIRED, 'Type of entry, either `buy` or `sell`');
         $this->addArgument('name', InputArgument::REQUIRED, 'Book name for this entry');

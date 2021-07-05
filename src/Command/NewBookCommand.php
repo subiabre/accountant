@@ -13,7 +13,7 @@ class NewBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:new:book');
+        $this->setName('commands:new:book');
         $this->setAliases(['new']);
         $this->setDescription('Create a new accounting book');
 

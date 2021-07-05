@@ -20,7 +20,7 @@ class ListAccountingsCommand extends Command
 
     protected function configure()
     {
-        $this->setName('account:list:accountings');
+        $this->setName('commands:list:accountings');
         $this->setAliases(['accountings']);
         $this->setDescription('Get a list of the Accounting classes');
     }

@@ -13,7 +13,7 @@ class UpdateBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:update:book');
+        $this->setName('commands:update:book');
         $this->setAliases(['update']);
         $this->setDescription('Update an accounting book');
 

@@ -3,17 +3,12 @@
 namespace App\Command;
 
 use App\Console\AbstractBookCommand;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -21,7 +16,7 @@ class ExportBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:export');
+        $this->setName('commands:export');
         $this->setAliases(['export']);
         $this->setDescription('Export books data to a JSON encoded file');
 

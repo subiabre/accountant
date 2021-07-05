@@ -13,7 +13,7 @@ class RemoveBookCommand extends AbstractBookCommand
 {
     protected function configure()
     {
-        $this->setName('account:remove:book');
+        $this->setName('commands:remove:book');
         $this->setAliases(['drop']);
         $this->setDescription('Delete a book and all the entries it contains');
     
