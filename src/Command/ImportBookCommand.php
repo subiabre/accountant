@@ -110,7 +110,7 @@ class ImportBookCommand extends AbstractBookCommand
                 ->setValue(
                     Money::of(
                         BigDecimal::of(
-                            sprintf('%d.%d', 
+                            sprintf('%s.%s', 
                                 $entryData['value']['amount']['integralPart'],
                                 $entryData['value']['amount']['fractionalPart']
                             )
