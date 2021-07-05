@@ -41,7 +41,7 @@ class ReadBooksCommand extends AbstractBookCommand
             $books = $this->bookRepository->findLikeName($names, $this->getSortOption($input));
         }
 
-        $table = new BooksTable($output);
+        $table = new BooksTable($input, $output);
 
         foreach ($books as $book) {
             $book

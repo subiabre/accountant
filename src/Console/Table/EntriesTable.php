@@ -4,6 +4,7 @@ namespace App\Console\Table;
 
 use App\Entity\Book;
 use App\Entity\Entry;
+use NumberFormatter;
 
 class EntriesTable extends AbstractTable
 {
@@ -15,6 +16,9 @@ class EntriesTable extends AbstractTable
 
     /** @var Book */
     private Book $tempBook;
+
+    /** @var NumberFormatter */
+    private NumberFormatter $formatter;
     
     public function configure(): void
     {
@@ -32,6 +36,10 @@ class EntriesTable extends AbstractTable
 
     protected function beforeRows($rows): void
     {
+        $this->formatter = new NumberFormatter(
+            $rows[0]->getBook()->getCashFormat(), 
+            NumberFormatter::DEFAULT_STYLE
+        );
         $this->tempBook = new Book();
     }
 
@@ -64,7 +72,7 @@ class EntriesTable extends AbstractTable
 
     public function getAmount()
     {
-        return $this->entry->getAmount();
+        return $this->formatter->format($this->entry->getAmount()->toFloat());
     }
 
     public function getValue()

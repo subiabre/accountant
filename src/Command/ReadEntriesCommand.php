@@ -42,7 +42,7 @@ class ReadEntriesCommand extends AbstractBookCommand
             ->setDateFormat($this->getDateFormatOption($input, $book))
             ;
 
-        $table = new EntriesTable($output);
+        $table = new EntriesTable($input, $output);
         $table
             ->addItems($book->getEntries())
             ->render();

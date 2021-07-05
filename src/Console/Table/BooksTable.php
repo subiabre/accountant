@@ -4,6 +4,7 @@ namespace App\Console\Table;
 
 use App\Accounting\AccountingInterface;
 use App\Entity\Book;
+use NumberFormatter;
 
 class BooksTable extends AbstractTable
 {
@@ -12,6 +13,9 @@ class BooksTable extends AbstractTable
 
     /** @var AccountingInterface */
     private AccountingInterface $accounting;
+
+    /** @var NumberFormatter */
+    private NumberFormatter $formatter;
 
     public function configure(): void
     {
@@ -23,7 +27,10 @@ class BooksTable extends AbstractTable
 
     protected function beforeRows($rows): void
     {
-        return;
+        $this->formatter = new NumberFormatter(
+            $rows[0]->getCashFormat(),
+            NumberFormatter::DEFAULT_STYLE
+        );
     }
 
     protected function onRow($row): void
@@ -69,7 +76,7 @@ class BooksTable extends AbstractTable
 
     public function getAmount()
     {
-        return $this->accounting->getDifferenceAmount();
+        return $this->formatter->format($this->accounting->getDifferenceAmount()->toFloat());
     }
 
     public function getAveragePrice()

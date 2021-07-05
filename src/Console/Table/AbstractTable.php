@@ -2,21 +2,23 @@
 
 namespace App\Console\Table;
 
-use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class AbstractTable
 {
-    private Table $table;
+    private SymfonyStyle $style;
 
     private array $columns = [];
     private array $items = [];
+    
+    private array $headers = [];
+    private array $rows = [];
 
-    private $row;
-
-    public function __construct(OutputInterface $output)
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->table = new Table($output);
+        $this->style = new SymfonyStyle($input, $output);
     }
 
     abstract public function configure(): void;
@@ -76,7 +78,7 @@ abstract class AbstractTable
 
     final protected function preRender()
     {
-        $this->table->setHeaders(array_keys($this->columns));
+        $this->headers = array_keys($this->columns);
 
         $this->beforeRows($this->items);
         foreach ($this->items as $item) {
@@ -87,7 +89,7 @@ abstract class AbstractTable
                 $row[] = $this->$method();
             }
 
-            $this->table->addRow($row);
+            $this->rows[] = $row;
         }
     }
 
@@ -96,6 +98,6 @@ abstract class AbstractTable
         $this->configure();
         $this->preRender();
 
-        return $this->table->render();
+        return $this->style->table($this->headers, $this->rows);
     }
 }

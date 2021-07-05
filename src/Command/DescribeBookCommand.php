@@ -8,6 +8,7 @@ use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class DescribeBookCommand extends AbstractBookCommand
 {
@@ -30,13 +31,14 @@ class DescribeBookCommand extends AbstractBookCommand
             return self::FAILURE;
         }
 
-        $table = new BooksTable($output);
+        $table = new BooksTable($input, $output);
         $table
             ->setColumn('Currency', 'getCurrency')
             ->setColumn('Format', 'getCashFormat')
             ->setColumn('Accounting', 'getAccounting')
             ->addItem($book)
-            ->render();
+            ->render()
+            ;
 
         return self::SUCCESS;
     }
