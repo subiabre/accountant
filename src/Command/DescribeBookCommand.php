@@ -23,7 +23,6 @@ class DescribeBookCommand extends AbstractBookCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-
         $book = $this->bookService->findBookByName($name);
 
         if (!$book) {
