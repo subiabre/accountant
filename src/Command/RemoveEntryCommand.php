@@ -37,7 +37,7 @@ class RemoveEntryCommand extends AbstractBookCommand
         
         $this->bookService->saveBook($book);
 
-        $table = new EntriesTable($output);
+        $table = new EntriesTable($input, $output);
         $table
             ->addItems($book->getEntries())
             ->render()

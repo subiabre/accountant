@@ -59,7 +59,7 @@ class NewEntryCommand extends AbstractBookCommand
 
         $this->bookService->saveBook($book);
 
-        $table = new BooksTable($output);
+        $table = new BooksTable($input, $output);
         $table
             ->addItem($book)
             ->render();

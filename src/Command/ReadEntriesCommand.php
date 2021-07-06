@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Console\AbstractBookCommand;
-use App\Console\Table\BooksTable;
 use App\Console\Table\EntriesTable;
 use App\Entity\Book;
 use Symfony\Component\Console\Input\InputArgument;

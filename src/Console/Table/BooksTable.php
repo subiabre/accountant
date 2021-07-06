@@ -27,6 +27,8 @@ class BooksTable extends AbstractTable
 
     protected function beforeRows($rows): void
     {
+        if (empty($rows)) return;
+
         $this->formatter = new NumberFormatter(
             $rows[0]->getCashFormat(),
             NumberFormatter::DEFAULT_STYLE
